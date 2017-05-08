@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
-    version='0.1',
+    version='0.1.1',
     description='A random test lib',
     author='Tim Pagurets',
     author_email='tim@preply.com',
