@@ -133,7 +133,7 @@ dj_anonymizer provides some helpful field types for anonymization classes:
     * `seq_kwargs` - dict of args for `seq_callback`
     * `seq_slugify` - flag, slugify or not result of `seq_callback`
 
-##Clean data
+## Clean data
 Just register your model with `register_clean`.
 
 **Example 1** - delete all data from model User
@@ -162,7 +162,7 @@ register_clean(User, UserAnonym)
 
 ```
 
-#Run dj_anonymizer
+# Run dj_anonymizer
 `$ manage.py dj_anonymizer`
 
 run anonymize and clean models witch you have been registered.
