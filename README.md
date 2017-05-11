@@ -1,6 +1,6 @@
 dj_anonymizer
 ==================================
-This project helps you to anonymize your production database with any fake data as you want.
+This project helps anonymize production database with fake data of any kind.
 
 dj_generating uses [django-bulk-update](https://github.com/aykut/django-bulk-update) lib to be able to prcess huge massive of data.
 
@@ -31,19 +31,19 @@ class Book(models.Model):
     name = models.CharField(max_length=100)
     authors = models.ManyToManyField(Author)
 ```
-And for example you want to anonymize authors' names.
+You want to anonymize authors' names.
 So you can set all names as "Jon Dou (n)".
 
-For anonymize your models go through the next steps:
+To anonymize your models go through the following steps:
 
 * Create file e.g. `anonymization.py` in `my_app`.
-* Add `ANONYMIZER_IMPORTS` to project settings and set path to _anonymization.py_ file:
+* Add `ANONYMIZER_IMPORTS` to project settings and set path to `anonymization.py` file:
 ```
 ANONYMIZER_IMPORTS = [
     "my_app.anonymization"
 ]
 ```
-* in `anonymization.py`
+* In `anonymization.py` file:
 ```
 from dj_anonymizer import register_anonym, register_skip, AnonymBase, anonym_field
 from my_app import Author, Book
@@ -61,27 +61,27 @@ register_anonym(Author, AuthorAnonym)
 register_skip(Book)
 ```
 
-* Run `manage.py anonymize_db`
+* Run `$ manage.py anonymize_db`
 
 Usage
 ===============
-You must specify all models and all thier fields in dj_anonymizer. This helps you to avoid the situation when something has changed in your project models (e.g. some fields with sensitive data were added) and you forget to clean or fake them.
+You must specify all models and all their fields in dj_anonymizer. This helps you to avoid the situation when something has changed in your project models (e.g. some fields with sensitive data were added) and you forget to clean or fake them.
 
-## Model registrations
+## Model registration
 `from dj_anonymizer import register_anonym, register_skip, register_clean`
 * `register_anonym(model, cls_anonym)` - register models for anonymization
     * `model` - model class
-    * `cls_anonym` - aninymizations class, inherited form AnonymBase
-* `register_clean(model, cls_anonym=None)` - register models witch should be cleaned
+    * `cls_anonym` - anonymization class, inherited form `AnonymBase`
+* `register_clean(model, cls_anonym=None)` - register models which should be cleaned
     * `model` - model class
-    * `cls_anonym` - aninymizations class, specified queryset of data witch must be deleted. if `cls_anonym=None` all data from model will be deleted.
-* `register_skip(*args)` - list of models witch dj_anonymizer will skip.
+    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted. If `cls_anonym=None`, all model data will be deleted.
+* `register_skip(*args)` - list of models which dj_anonymizer will skip.
 
-## Anonymize data
-Anonymization class must be inherited from AnonymBase. Anonymization class contains class attributes witch mapped to model fields. Also anonymization class could contains `class Meta` where you can specified queryset and excluded fields.
+## Data anonymization
+Anonymization class must be inherited from AnonymBase. Anonymization class contains attributes mapped to model fields. Also anonymization class may contain `class Meta` where you can specify queryset and excluded fields.
 
 Example:
- ```angular2html
+ ```
 from datetime import datetime
 
 from django.contrib.auth.models import User
@@ -107,36 +107,36 @@ class UserAnonym(AnonymBase):
     class Meta:
         queryset = User.objects.exclude(id=1)  # queryset, anonymize all users except the first one
         exclude_fields = ["groups", "user_permissions", "is_active", "is_superuser",
-                          "last_login", "date_joined"]  # list of fields witch will not be changed
+                          "last_login", "date_joined"]  # list of fields which will not be changed
 
 
 register_anonym(User, UserAnonym)
 ```
 
 In `class Meta` you can specify `queryset` and `exclude_fields`:
- * `queryset` - model queryset to witch will be applied anonymization. If you don't specified this attribute anonymizations will be applied to all rows of model (like `MyModel.objects.all()`)
- * `exclude_fields` - list of model fields witch should't be anonymized
+ * `queryset` - model queryset to which anonymization will be applied. If you don't specify this attribute, anonymization will be applied to all rows of model (like `MyModel.objects.all()`)
+ * `exclude_fields` - list of model fields which should not be anonymized
 
-dj_anonymizer provides some helpful field types for anonymization classes:
+dj_anonymizer provides certain helpful field types for anonymization classes:
  
-* `anonym_field.function(callback, args=(), kwargs=None)` - result of callback function will be set to the model field. callback function will be called for every record of your model.
-    * `callback` - function witch will generate data for model
+* `anonym_field.function(callback, args=(), kwargs=None)` - result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
+    * `callback` - function which will generate data for the model
     * `args` - tuple of args for `callback`
     * `kwargs` - dict of args for `callback`
 
 * `anonym_field.string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True)` - generate string for every record of the model.
-    * `field_value` - string witc will be set to field. It could contain `{seq}` parameter inside witch replaced to sequence value (e.g. `"username_{seq}"` will generate username_1, username_2 etc.)
-    * `seq_start` - value of sequence state
+    * `field_value` - string which will be set to field. It may contain `{seq}` parameter which will be replaced by sequence value (e.g. `"username_{seq}"` will generate username_1, username_2 etc.)
+    * `seq_start` - value of sequence start
     * `seq_step` - step of sequence
-    * `seq_callback` - function witch will generate data for `{seq}` parameter in string (e.g. `("test_email_{seq}@preply.com", seq_callback=datetime.now)`)
+    * `seq_callback` - function which will generate data for `{seq}` parameter in string (e.g. `("test_email_{seq}@preply.com", seq_callback=datetime.now)`)
     * `seq_args` - tuple of args for `seq_callback`
-    * `seq_kwargs` - dict of args for `seq_callback`
-    * `seq_slugify` - flag, slugify or not result of `seq_callback`
+    * `seq_kwargs` - dict of kwargs for `seq_callback`
+    * `seq_slugify` - flag, slugify or not result of execution of `seq_callback`
 
 ## Clean data
-Just register your model with `register_clean`.
+Register your model with `register_clean`.
 
-**Example 1** - delete all data from model User
+**Example 1** - delete all data from model `User`
 ```
 from django.contrib.auth.models import User
 
@@ -146,7 +146,7 @@ from dj_anonymizer import register_clean
 register_clean(User)
 ```
 
-**Example 2** - delete all data from model User, except user with id=1:
+**Example 2** - delete all data from model `User`, except user with id=1:
 ```
 from django.contrib.auth.models import User
 
@@ -163,24 +163,23 @@ register_clean(User, UserAnonym)
 ```
 
 # Run dj_anonymizer
-`$ manage.py dj_anonymizer`
+* `$ manage.py dj_anonymizer`
 
-run anonymize and clean models witch you have been registered.
+    run anonymization and clean models which have been registered.
 
-`$ manage.py dj_anonymizer --soft_mode`
+* `$ manage.py dj_anonymizer --soft_mode`
 
-run anonymize and clean models and will not raise exception that not all project models are registered. 
+    run anonymization and clean models. Exception (not all project models are registered) will not be raised that. 
 
+* `$ manage.py dj_anonymizer --action clean`
 
+    run only delete data
 
-`$ manage.py dj_anonymizer --action clean`
+* `$ manage.py dj_anonymizer --action anonymize`
 
-will run only delete data (will not anonymize data)
+    run only anonymization data
 
-`$ manage.py dj_anonymizer --action anonymize`
-will run only anonymize data (will not delete data)
-
-# Setting
+# Settings
 
 * `ANONYMIZER_IMPORTS` - list of path to *.py files where you register models for anomymization.
 
