@@ -1,5 +1,6 @@
 dj_anonymizer
 ==================================
+dj_anonymizer requires Django 1.8 or greater and Python 2.7 (not support Python 3).
 This project helps anonymize production database with fake data of any kind.
 
 dj_anonymizer uses [django-bulk-update](https://github.com/aykut/django-bulk-update) lib to be able to process huge massive of data.
