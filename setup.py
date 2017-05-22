@@ -2,18 +2,24 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+import os
+
+
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 
 setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
-    version='0.1.2',
+    version='0.1.3',
     description='This project helps anonymize production database with fake data of any kind.',
+    long_description=(read('README.rst')),
     license='MIT',
     author='Tim Pagurets',
     author_email='tim@preply.com',
     url='https://github.com/knowledge-point/dj_anonymizer',
-    download_url='https://github.com/knowledge-point/dj_anonymizer/archive/0.1.2.tar.gz',
+    download_url='https://github.com/knowledge-point/dj_anonymizer/archive/0.1.3.tar.gz',
     keywords=['django', 'data', 'database', 'anonymization', 'dj-anonymizer'],
     classifiers=[
         'Development Status :: 4 - Beta',
