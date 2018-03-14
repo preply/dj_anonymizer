@@ -164,19 +164,19 @@ register_clean(User, UserAnonym)
 ```
 
 # Run dj_anonymizer
-* `$ manage.py dj_anonymizer`
+* `$ manage.py anonymize_db`
 
     run anonymization and clean models which have been registered.
 
-* `$ manage.py dj_anonymizer --soft_mode`
+* `$ manage.py anonymize_db --soft_mode`
 
     run anonymization and clean models. Exception (not all project models are registered) will not be raised that. 
 
-* `$ manage.py dj_anonymizer --action clean`
+* `$ manage.py anonymize_db --action clean`
 
     run only delete data
 
-* `$ manage.py dj_anonymizer --action anonymize`
+* `$ manage.py anonymize_db --action anonymize`
 
     run only anonymization data
 
