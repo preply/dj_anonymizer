@@ -5,7 +5,7 @@ This project helps anonymize production database with fake data of any kind.
 
 dj_anonymizer uses [django-bulk-update](https://github.com/aykut/django-bulk-update) lib to be able to process huge massive of data.
 
-Installation
+Installation        
 ==================================
 `$ pip install dj_anonymizer`
 
