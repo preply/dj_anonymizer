@@ -2,12 +2,12 @@ import itertools
 from django.template.defaultfilters import slugify
 
 
-# def function(callback, args=(), kwargs=None):
-#     if kwargs is None:
-#         kwargs = {}
-#
-#     for _ in itertools.count():
-#         yield callback(*args, **kwargs)
+def function(callback, args=(), kwargs=None):
+    if kwargs is None:
+        kwargs = {}
+
+    for _ in itertools.count():
+        yield callback(*args, **kwargs)
 
 
 def string(

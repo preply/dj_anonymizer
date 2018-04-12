@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from dj_anonymizer.anonymizer import Anonymizer
 
 
-class Command(BaseCommand):
+class CommandAnonymize(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--action', help='"anonymize" models or "clean" models '
                                              '(default: both actions will be applied)')
