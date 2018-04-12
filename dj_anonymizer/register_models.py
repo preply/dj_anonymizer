@@ -24,10 +24,9 @@ class AnonymBase:
 
         relation_fields = [field.name for field in model._meta.get_fields()
                            if isinstance(field, (ManyToManyField, OneToOneField, ForeignKey))]
+        relation_fields.append(model._meta.pk.name)
 
-        cls.Meta.exclude_fields = list(set(
-            cls.Meta.exclude_fields + relation_fields + [model._meta.pk.name]
-        ))
+        cls.Meta.exclude_fields.extend(relation_fields)
 
         if not hasattr(cls.Meta, 'fill_empty'):
             setattr(cls.Meta, 'fill_empty', False)
