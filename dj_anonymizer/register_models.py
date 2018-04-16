@@ -39,23 +39,33 @@ def register_anonym(model, cls_anonym):
     cls_anonym.init_meta(model)
 
     exclude_fields = set(cls_anonym.Meta.exclude_fields)
-
-    model_fields = set(field.name for field in model._meta.get_fields() if isinstance(field, Field))
     anonym_fields = set(cls_anonym.get_fields_names())
 
-    if exclude_fields & anonym_fields:
-        print 'Fields are in anonymization list and in the excluded list:'
-        print list(exclude_fields & anonym_fields)
-        raise LookupError
+    model_fields = set(field.name for field in model._meta.get_fields() if isinstance(field, Field))
 
-    if exclude_fields | anonym_fields != model_fields:
-        if exclude_fields | anonym_fields <= model_fields:
-            print 'Fields were not registered in {} class for {} model:'.format(cls_anonym.__name__, model.__name__)
-            print list(model_fields - exclude_fields - anonym_fields)
-        else:
-            print 'Fields are present in {} class but not exist do not in {} model'.format(cls_anonym.__name__, model.__name__)
-            print list((exclude_fields | anonym_fields) - model_fields)
-        raise LookupError
+    if exclude_fields & anonym_fields:
+        raise LookupError(
+            'Fields {} of model {} are present in both anonymization and excluded lists'
+            .format(list(exclude_fields & anonym_fields), model.__name__)
+        )
+
+    specified_fields = exclude_fields | anonym_fields
+
+    if specified_fields < model_fields:
+        raise LookupError(
+            'Fields {} were not registered in {} class for {} model:'
+            .format(list(model_fields - specified_fields), cls_anonym.__name__, model.__name__)
+        )
+    if specified_fields > model_fields:
+        raise LookupError(
+            'Fields {} are present in {} class, but do not exist in {} model'
+            .format(list(specified_fields - model_fields), cls_anonym.__name__, model.__name__)
+        )
+    if specified_fields != model_fields:
+        raise LookupError(
+            'Fields in {} are not the same as in {}. Check spelling'
+            .format(cls_anonym.__name__, model.__name__)
+        )
 
     Anonymizer.anonym_models[model.__module__ + '.' + model.__name__] = cls_anonym
 
