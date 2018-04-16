@@ -10,7 +10,10 @@ def function(callback, args=(), kwargs=None):
         yield callback(*args, **kwargs)
 
 
-def string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True):
+def string(
+    field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(),
+    seq_kwargs=None, seq_slugify=True
+):
     if seq_kwargs is None:
         seq_kwargs = {}
 
