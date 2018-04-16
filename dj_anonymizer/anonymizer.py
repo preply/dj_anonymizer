@@ -21,12 +21,11 @@ class Anonymizer:
                     model.__module__ + '.' + model.__name__ for model in app.get_models()
                 )
 
-        models = set(self.skip_models + self.anonym_models.keys() + self.clean_models.keys())
+        all_models = set(self.skip_models + self.anonym_models.keys() + self.clean_models.keys())
 
-        if not soft_mode and not models_set.issubset(models):
-            print 'You did not set models to any list:'
-            print list(models_set.difference(set(models)))
-            raise LookupError
+        if not soft_mode and not models_set.issubset(all_models):
+            raise LookupError('You did not set those models to any list: {}'.format(
+                              list(models_set.difference(all_models))))
 
     def anonymize(self):
         print 'Updating started'
