@@ -12,7 +12,7 @@ def read(*rnames):
 setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
-    version='0.1.3',
+    version='0.1.4',
     description='This project helps anonymize production database with fake data of any kind.',
     long_description=(read('README.md')),
     license='MIT',
