@@ -31,5 +31,8 @@ setup(
         'Framework :: Django',
         'Topic :: Database'
     ],
-    install_requires=['django-bulk-update==2.2.0']
+    install_requires=[
+        'Django==1.11.10',
+        'django-bulk-update==2.2.0'
+    ]
 )

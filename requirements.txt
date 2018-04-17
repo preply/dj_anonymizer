@@ -1,2 +1,0 @@
-Django==1.11.10
-django-bulk-update==2.2.0
