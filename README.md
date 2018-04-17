@@ -73,10 +73,12 @@ You must specify all models and all their fields in dj_anonymizer. This helps yo
 * `register_anonym(model, cls_anonym)` - register models for anonymization
     * `model` - model class
     * `cls_anonym` - anonymization class, inherited form `AnonymBase`
-* `register_clean(model, cls_anonym=None)` - register models which should be cleaned
+* `register_clean(models)` - register models which should be cleaned
+    * `models` - list of models, all models data will be deleted.
+* `register_clean_with_rules(model, cls_anonym)` - register models which should be cleaned
     * `model` - model class
-    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted. If `cls_anonym=None`, all model data will be deleted.
-* `register_skip(*args)` - list of models which dj_anonymizer will skip.
+    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted.
+* `register_skip(models)` - list of models which dj_anonymizer will skip.
 
 ## Data anonymization
 Anonymization class must be inherited from AnonymBase. Anonymization class contains attributes mapped to model fields. Also anonymization class may contain `class Meta` where you can specify queryset and excluded fields.

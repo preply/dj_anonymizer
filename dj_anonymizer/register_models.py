@@ -70,15 +70,18 @@ def register_anonym(model, cls_anonym):
     Anonymizer.anonym_models[model.__module__ + '.' + model.__name__] = cls_anonym
 
 
-def register_clean(model, cls_anonym=None):
-    if cls_anonym:
-        cls_anonym.init_meta(model)
-        queryset = cls_anonym.Meta.queryset
-    else:
+def register_clean(models):
+    for model in models:
         queryset = model.objects.all()
+        Anonymizer.clean_models[model.__module__ + '.' + model.__name__] = queryset
+
+
+def register_clean_with_rules(model, cls_anonym):
+    cls_anonym.init_meta(model)
+    queryset = cls_anonym.Meta.queryset
     Anonymizer.clean_models[model.__module__ + '.' + model.__name__] = queryset
 
 
-def register_skip(*args):
-    for model in args:
+def register_skip(models):
+    for model in models:
         Anonymizer.skip_models.append(model.__module__ + '.' + model.__name__)
