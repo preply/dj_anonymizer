@@ -57,7 +57,7 @@ class AuthorAnonym(AnonymBase):
        exclude_fields = ["birth_date"]
 
 
-register_anonym(Author, AuthorAnonym)
+register_anonym([(Author, AuthorAnonym)])
 
 register_skip(Book)
 ```
@@ -70,9 +70,9 @@ You must specify all models and all their fields in dj_anonymizer. This helps yo
 
 ## Model registration
 `from dj_anonymizer import register_anonym, register_skip, register_clean`
-* `register_anonym(model, cls_anonym)` - register models for anonymization
-    * `model` - model class
-    * `cls_anonym` - anonymization class, inherited form `AnonymBase`
+* `register_anonym(models)` - register models for anonymization
+    * `models` - tuple  `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - 
+    anonymization class, inherited form `AnonymBase`
 * `register_clean(models)` - register models which should be cleaned
     * `models` - list of models, all models data will be deleted.
 * `register_clean_with_rules(model, cls_anonym)` - register models which should be cleaned
@@ -113,7 +113,7 @@ class UserAnonym(AnonymBase):
                           "last_login", "date_joined"]  # list of fields which will not be changed
 
 
-register_anonym(User, UserAnonym)
+register_anonym([(User, UserAnonym), (SomeClass, SomeClassAnonym)])
 ```
 
 In `class Meta` you can specify `queryset` and `exclude_fields`:

@@ -35,39 +35,40 @@ class AnonymBase(object):
         pass
 
 
-def register_anonym(model, cls_anonym):
-    cls_anonym.init_meta(model)
+def register_anonym(models):
+    for model, cls_anonym in models:
+        cls_anonym.init_meta(model)
 
-    exclude_fields = set(cls_anonym.Meta.exclude_fields)
-    anonym_fields = set(cls_anonym.get_fields_names())
+        exclude_fields = set(cls_anonym.Meta.exclude_fields)
+        anonym_fields = set(cls_anonym.get_fields_names())
 
-    model_fields = set(field.name for field in model._meta.get_fields() if isinstance(field, Field))
+        model_fields = set(field.name for field in model._meta.get_fields() if isinstance(field, Field))
 
-    if exclude_fields & anonym_fields:
-        raise LookupError(
-            'Fields {} of model {} are present in both anonymization and excluded lists'
-            .format(list(exclude_fields & anonym_fields), model.__name__)
-        )
+        if exclude_fields & anonym_fields:
+            raise LookupError(
+                'Fields {} of model {} are present in both anonymization and excluded lists'
+                .format(list(exclude_fields & anonym_fields), model.__name__)
+            )
 
-    specified_fields = exclude_fields | anonym_fields
+        specified_fields = exclude_fields | anonym_fields
 
-    if specified_fields < model_fields:
-        raise LookupError(
-            'Fields {} were not registered in {} class for {} model:'
-            .format(list(model_fields - specified_fields), cls_anonym.__name__, model.__name__)
-        )
-    if specified_fields > model_fields:
-        raise LookupError(
-            'Fields {} are present in {} class, but do not exist in {} model'
-            .format(list(specified_fields - model_fields), cls_anonym.__name__, model.__name__)
-        )
-    if specified_fields != model_fields:
-        raise LookupError(
-            'Fields in {} are not the same as in {}. Check spelling'
-            .format(cls_anonym.__name__, model.__name__)
-        )
+        if specified_fields < model_fields:
+            raise LookupError(
+                'Fields {} were not registered in {} class for {} model:'
+                .format(list(model_fields - specified_fields), cls_anonym.__name__, model.__name__)
+            )
+        if specified_fields > model_fields:
+            raise LookupError(
+                'Fields {} are present in {} class, but do not exist in {} model'
+                .format(list(specified_fields - model_fields), cls_anonym.__name__, model.__name__)
+            )
+        if specified_fields != model_fields:
+            raise LookupError(
+                'Fields in {} are not the same as in {}. Check spelling'
+                .format(cls_anonym.__name__, model.__name__)
+            )
 
-    Anonymizer.anonym_models[model.__module__ + '.' + model.__name__] = cls_anonym
+        Anonymizer.anonym_models[model.__module__ + '.' + model.__name__] = cls_anonym
 
 
 def register_clean(models):
