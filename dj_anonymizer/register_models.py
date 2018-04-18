@@ -6,7 +6,7 @@ from django.db.models.fields.related import ManyToManyField, OneToOneField, Fore
 from anonymizer import Anonymizer
 
 
-class AnonymBase(object):
+class AnonymBase:
     @classmethod
     def get_fields_names(cls):
         return [attr_name for attr_name in dir(cls) if inspect.isgenerator(getattr(cls, attr_name))]

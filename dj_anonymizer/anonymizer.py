@@ -1,6 +1,5 @@
 from django_bulk_update.helper import bulk_update
 from django.apps import apps
-from django.conf import settings
 
 from .defaults import ANONYMIZER_SELECT_BATCH_SIZE, ANONYMIZER_UPDATE_BATCH_SIZE
 
@@ -11,15 +10,11 @@ class Anonymizer:
     skip_models = []
 
     def __init__(self, soft_mode=True):
-        for module in settings.ANONYMIZER_IMPORTS:
-            __import__(module)
-
         models_set = set()
         for app in apps.get_app_configs():
-            if app.name not in settings.ANONYMIZER_SKIP_APPS:
-                models_set.update(
-                    model.__module__ + '.' + model.__name__ for model in app.get_models()
-                )
+            models_set.update(
+                model.__module__ + '.' + model.__name__ for model in app.get_models()
+            )
 
         all_models = set(self.skip_models + self.anonym_models.keys() + self.clean_models.keys())
 

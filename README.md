@@ -38,12 +38,6 @@ So you can set all names as "Jon Dou (n)".
 To anonymize your models go through the following steps:
 
 * Create file e.g. `anonymization.py` in `my_app`.
-* Add `ANONYMIZER_IMPORTS` to project settings and set path to `anonymization.py` file:
-```
-ANONYMIZER_IMPORTS = [
-    "my_app.anonymization"
-]
-```
 * In `anonymization.py` file:
 ```
 from dj_anonymizer import register_anonym, register_skip, AnonymBase, anonym_field
@@ -75,7 +69,7 @@ You must specify all models and all their fields in dj_anonymizer. This helps yo
     anonymization class, inherited form `AnonymBase`
 * `register_clean(models)` - register models which should be cleaned
     * `models` - list of models, all models data will be deleted.
-* `register_clean_with_rules(model, cls_anonym)` - register models which should be cleaned
+* `register_clean_with_rules(model, cls_anonym)` - register model which should be cleaned
     * `model` - model class
     * `cls_anonym` - anonymization class, specified queryset of data which must be deleted.
 * `register_skip(models)` - list of models which dj_anonymizer will skip.
@@ -183,10 +177,6 @@ register_clean(User, UserAnonym)
     run only anonymization data
 
 # Settings
-
-* `ANONYMIZER_IMPORTS` - list of path to *.py files where you register models for anomymization.
-
-* `ANONYMIZER_SKIP_APPS` - list of apps of your django project that you don't want to anonymize.
 
 * `ANONYMIZER_SELECT_BATCH_SIZE` - default value is 20000. 
 
