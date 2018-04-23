@@ -5,7 +5,7 @@ This project helps anonymize production database with fake data of any kind.
 
 dj_anonymizer uses [django-bulk-update](https://github.com/aykut/django-bulk-update) lib to be able to process huge massive of data.
 
-Installation
+Installation        
 ==================================
 `$ pip install dj_anonymizer`
 
@@ -38,12 +38,6 @@ So you can set all names as "Jon Dou (n)".
 To anonymize your models go through the following steps:
 
 * Create file e.g. `anonymization.py` in `my_app`.
-* Add `ANONYMIZER_IMPORTS` to project settings and set path to `anonymization.py` file:
-```
-ANONYMIZER_IMPORTS = [
-    "my_app.anonymization"
-]
-```
 * In `anonymization.py` file:
 ```
 from dj_anonymizer import register_anonym, register_skip, AnonymBase, anonym_field
@@ -57,7 +51,7 @@ class AuthorAnonym(AnonymBase):
        exclude_fields = ["birth_date"]
 
 
-register_anonym(Author, AuthorAnonym)
+register_anonym([(Author, AuthorAnonym)])
 
 register_skip(Book)
 ```
@@ -70,13 +64,15 @@ You must specify all models and all their fields in dj_anonymizer. This helps yo
 
 ## Model registration
 `from dj_anonymizer import register_anonym, register_skip, register_clean`
-* `register_anonym(model, cls_anonym)` - register models for anonymization
+* `register_anonym(models)` - register models for anonymization
+    * `models` - tuple  `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - 
+    anonymization class, inherited form `AnonymBase`
+* `register_clean(models)` - register models which should be cleaned
+    * `models` - list of models, all models data will be deleted.
+* `register_clean_with_rules(model, cls_anonym)` - register model which should be cleaned
     * `model` - model class
-    * `cls_anonym` - anonymization class, inherited form `AnonymBase`
-* `register_clean(model, cls_anonym=None)` - register models which should be cleaned
-    * `model` - model class
-    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted. If `cls_anonym=None`, all model data will be deleted.
-* `register_skip(*args)` - list of models which dj_anonymizer will skip.
+    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted.
+* `register_skip(models)` - list of models which dj_anonymizer will skip.
 
 ## Data anonymization
 Anonymization class must be inherited from AnonymBase. Anonymization class contains attributes mapped to model fields. Also anonymization class may contain `class Meta` where you can specify queryset and excluded fields.
@@ -111,7 +107,7 @@ class UserAnonym(AnonymBase):
                           "last_login", "date_joined"]  # list of fields which will not be changed
 
 
-register_anonym(User, UserAnonym)
+register_anonym([(User, UserAnonym), (SomeClass, SomeClassAnonym)])
 ```
 
 In `class Meta` you can specify `queryset` and `exclude_fields`:
@@ -181,10 +177,6 @@ register_clean(User, UserAnonym)
     run only anonymization data
 
 # Settings
-
-* `ANONYMIZER_IMPORTS` - list of path to *.py files where you register models for anomymization.
-
-* `ANONYMIZER_SKIP_APPS` - list of apps of your django project that you don't want to anonymize.
 
 * `ANONYMIZER_SELECT_BATCH_SIZE` - default value is 20000. 
 
