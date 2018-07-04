@@ -26,13 +26,8 @@ class Anonymizer:
         print 'Updating started'
         for anonym_cls in self.anonym_models.values():
 
-            print('self.anonym_models.values() =', self.anonym_models.values())
-            print('anonym_cls.get_fields_names() =', anonym_cls.get_fields_names())
-
             if not anonym_cls.get_fields_names():
                 continue
-
-            print('preparing queryset...')
 
             queryset = anonym_cls.Meta.queryset.only(*anonym_cls.get_fields_names())
             print '\nGenerating fake values for model "{}"'.format(queryset.model.__name__)
