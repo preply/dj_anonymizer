@@ -31,7 +31,7 @@ setup(
         'Topic :: Database'
     ],
     install_requires=[
-        'Django==1.11.10',
+        'Django==1.11',
         'django-bulk-update==2.2.0'
     ]
 )
