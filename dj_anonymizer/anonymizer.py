@@ -1,7 +1,10 @@
 from django_bulk_update.helper import bulk_update
 from django.apps import apps
 
-from .defaults import ANONYMIZER_SELECT_BATCH_SIZE, ANONYMIZER_UPDATE_BATCH_SIZE
+from .defaults import (
+    ANONYMIZER_SELECT_BATCH_SIZE,
+    ANONYMIZER_UPDATE_BATCH_SIZE,
+)
 
 
 class Anonymizer:
@@ -13,14 +16,20 @@ class Anonymizer:
         models_set = set()
         for app in apps.get_app_configs():
             models_set.update(
-                model.__module__ + '.' + model.__name__ for model in app.get_models()
+                model.__module__ + '.' + model.__name__
+                for model in app.get_models()
             )
 
-        all_models = set(self.skip_models + self.anonym_models.keys() + self.clean_models.keys())
+        all_models = set(
+            self.skip_models +
+            self.anonym_models.keys() +
+            self.clean_models.keys()
+        )
 
         if not soft_mode and not models_set.issubset(all_models):
-            raise LookupError('You did not set those models to any list: {}'.format(
-                              list(models_set.difference(all_models))))
+            raise LookupError(
+                'You did not set those models to any list: {}'.format(
+                    list(models_set.difference(all_models))))
 
     def anonymize(self):
         print 'Updating started'
@@ -29,8 +38,13 @@ class Anonymizer:
             if not anonym_cls.get_fields_names():
                 continue
 
-            queryset = anonym_cls.Meta.queryset.only(*anonym_cls.get_fields_names())
-            print '\nGenerating fake values for model "{}"'.format(queryset.model.__name__)
+            queryset = anonym_cls.Meta.queryset.only(
+                *anonym_cls.get_fields_names()
+            )
+
+            print '\nGenerating fake values for model "{}"'.format(
+                queryset.model.__name__
+            )
 
             i = 0
             total = queryset.count()
@@ -41,7 +55,9 @@ class Anonymizer:
 
                     for name in anonym_cls.get_fields_names():
                         if getattr(model, name) or anonym_cls.Meta.fill_empty:
-                            setattr(model, name, next(getattr(anonym_cls, name)))
+                            setattr(model, name, next(
+                                getattr(anonym_cls, name))
+                            )
 
                 bulk_update(sub_set,
                             batch_size=ANONYMIZER_UPDATE_BATCH_SIZE,

@@ -1,11 +1,11 @@
-dj_anonymizer
+dj_anonymizer[![Build Status](https://travis-ci.com/knowledge-point/dj_anonymizer.svg?branch=master)](https://travis-ci.com/knowledge-point/dj_anonymizer)
 ==================================
 dj_anonymizer requires Django 1.8 or greater and Python 2.7 (not support Python 3).
 This project helps anonymize production database with fake data of any kind.
 
 dj_anonymizer uses [django-bulk-update](https://github.com/aykut/django-bulk-update) lib to be able to process huge massive of data.
 
-Installation        
+Installation
 ==================================
 `$ pip install dj_anonymizer`
 
@@ -46,7 +46,7 @@ from my_app import Author, Book
 
 class AuthorAnonym(AnonymBase):
    name = anonym_field.string("Jon Dou {seq}")
-   
+
    class Meta:
        exclude_fields = ["birth_date"]
 
@@ -65,7 +65,7 @@ You must specify all models and all their fields in dj_anonymizer. This helps yo
 ## Model registration
 `from dj_anonymizer import register_anonym, register_skip, register_clean`
 * `register_anonym(models)` - register models for anonymization
-    * `models` - tuple  `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - 
+    * `models` - tuple  `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` -
     anonymization class, inherited form `AnonymBase`
 * `register_clean(models)` - register models which should be cleaned
     * `models` - list of models, all models data will be deleted.
@@ -115,7 +115,7 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
  * `exclude_fields` - list of model fields which should not be anonymized
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
- 
+
 * `anonym_field.function(callback, args=(), kwargs=None)` - result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
     * `callback` - function which will generate data for the model
     * `args` - tuple of args for `callback`
@@ -166,7 +166,7 @@ register_clean(User, UserAnonym)
 
 * `$ manage.py anonymize_db --soft_mode`
 
-    run anonymization and clean models. Exception (not all project models are registered) will not be raised that. 
+    run anonymization and clean models. Exception (not all project models are registered) will not be raised that.
 
 * `$ manage.py anonymize_db --action clean`
 
@@ -178,6 +178,6 @@ register_clean(User, UserAnonym)
 
 # Settings
 
-* `ANONYMIZER_SELECT_BATCH_SIZE` - default value is 20000. 
+* `ANONYMIZER_SELECT_BATCH_SIZE` - default value is 20000.
 
 * `ANONYMIZER_UPDATE_BATCH_SIZE` - default value is 500.
