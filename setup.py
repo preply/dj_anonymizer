@@ -13,7 +13,8 @@ setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
     version='0.1.6',
-    description='This project helps anonymize production database with fake data of any kind.',
+    description='This project helps anonymize production database' +
+                'with fake data of any kind.',
     long_description=(read('README.md')),
     license='MIT',
     author='Tim Pagurets',
