@@ -16,6 +16,7 @@ setup(
     description='This project helps anonymize production database' +
                 'with fake data of any kind.',
     long_description=(read('README.md')),
+    long_description_content_type='text/markdown',
     license='MIT',
     author='Tim Pagurets',
     url='https://github.com/knowledge-point/dj_anonymizer',
