@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 ANONYMIZER_SELECT_BATCH_SIZE = getattr(
     settings, 'ANONYMIZER_SELECT_BATCH_SIZE', 20000
 )

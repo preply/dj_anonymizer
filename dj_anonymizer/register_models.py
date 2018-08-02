@@ -2,9 +2,9 @@ import inspect
 
 from django.db.models.fields import Field
 from django.db.models.fields.related import (
-    ManyToManyField,
-    OneToOneField,
     ForeignKey,
+    ManyToManyField,
+    OneToOneField
 )
 
 from anonymizer import Anonymizer
