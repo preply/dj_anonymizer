@@ -8,3 +8,4 @@ install:
 
 script:
   - flake8 .
+  - isort -c
