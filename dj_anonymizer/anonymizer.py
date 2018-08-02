@@ -1,9 +1,10 @@
-from django_bulk_update.helper import bulk_update
 from django.apps import apps
+
+from django_bulk_update.helper import bulk_update
 
 from .defaults import (
     ANONYMIZER_SELECT_BATCH_SIZE,
-    ANONYMIZER_UPDATE_BATCH_SIZE,
+    ANONYMIZER_UPDATE_BATCH_SIZE
 )
 
 
