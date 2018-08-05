@@ -9,20 +9,6 @@ Documentation
 ==================================
 [https://dj-anonymizer.readthedocs.io/en/latest/](https://dj-anonymizer.readthedocs.io/en/latest/)
 
-Installation
-==================================
-`$ pip install dj_anonymizer`
-
-Add `dj_anonymizer` to `INSTALLED_APPS` in settings:
-
-```
-INSTALLED_APPS = [
-    # ...
-    "dj_anonymizer",
-    # ...
-]
-```
-
 Basic example
 ==================================
 For example you have django project with app `my_app` and `models.py` file:
