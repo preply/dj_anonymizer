@@ -2,10 +2,7 @@ from django.apps import apps
 
 from django_bulk_update.helper import bulk_update
 
-from .defaults import (
-    ANONYMIZER_SELECT_BATCH_SIZE,
-    ANONYMIZER_UPDATE_BATCH_SIZE
-)
+from dj_anonymizer.conf import settings
 
 
 class Anonymizer:
@@ -49,7 +46,7 @@ class Anonymizer:
 
             i = 0
             total = queryset.count()
-            for j in range(0, total, ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
+            for j in range(0, total, settings.ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
                 sub_set = queryset.order_by('pk')[i:j]
                 for model in sub_set:
                     i += 1
@@ -61,7 +58,7 @@ class Anonymizer:
                             )
 
                 bulk_update(sub_set,
-                            batch_size=ANONYMIZER_UPDATE_BATCH_SIZE,
+                            batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                             update_fields=anonym_cls.get_fields_names())
         print '\n\nUpdating finished'
 
