@@ -2,4 +2,4 @@ from django import apps
 
 
 class AppConfig(apps.AppConfig):
-    name = 'anonymizer'
+    name = 'dj_anonymizer'
