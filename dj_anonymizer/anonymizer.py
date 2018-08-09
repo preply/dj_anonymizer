@@ -1,5 +1,4 @@
 from django.apps import apps
-
 from django_bulk_update.helper import bulk_update
 
 from dj_anonymizer.conf import settings
@@ -46,7 +45,8 @@ class Anonymizer:
 
             i = 0
             total = queryset.count()
-            for j in range(0, total, settings.ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
+            for j in range(0, total,
+                           settings.ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
                 sub_set = queryset.order_by('pk')[i:j]
                 for model in sub_set:
                     i += 1
