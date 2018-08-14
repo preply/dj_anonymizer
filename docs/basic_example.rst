@@ -20,8 +20,9 @@ To anonymize your models go through the following steps:
 * Create file e.g. `anonymization.py` in `my_app`.
 * In `anonymization.py` file::
 
-    from dj_anonymizer import register_anonym, register_skip, \
-        AnonymBase, anonym_field
+    from dj_anonymizer.register_models import AnonymBase, register_anonym, \
+        register_skip
+    from dj_anonymizer import anonym_field
     from my_app import Author, Book
 
 

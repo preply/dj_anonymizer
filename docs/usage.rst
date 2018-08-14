@@ -43,8 +43,9 @@ Example::
     from django.contrib.auth.models import User
     from django.contrib.auth.hashers import make_password
 
-    from dj_anonymizer import register_anonym, AnonymBase, \
-        anonym_field
+    from dj_anonymizer.register_models import AnonymBase, register_anonym
+    from dj_anonymizer import anonym_field
+
     from faker import Factory
 
 
@@ -112,7 +113,7 @@ Example 1 - delete all data from model `User`::
 
     from django.contrib.auth.models import User
 
-    from dj_anonymizer import register_clean
+    from dj_anonymizer.register_models import register_clean
 
 
     register_clean(User)
@@ -121,7 +122,8 @@ Example 2 - delete all data from model `User`, except user with id=1::
 
     from django.contrib.auth.models import User
 
-    from dj_anonymizer import AnonymBase, register_clean
+    from dj_anonymizer.register_models import AnonymBase
+    from dj_anonymizer.register_models import register_clean
 
 
     class UserAnonym(AnonymBase):
