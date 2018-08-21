@@ -23,9 +23,10 @@ class UserAnonym(AnonymBase):
     first_name = anonym_field.string('first name {seq}')
     last_name = anonym_field.string('last name {seq}')
     password = anonym_field.string('password')
+    is_staff = anonym_field.function(lambda: False)
 
     class Meta:
-        exclude_fields = ['is_active', 'is_superuser', 'is_staff',
+        exclude_fields = ['is_active', 'is_superuser',
                           'last_login', 'date_joined']
 
 

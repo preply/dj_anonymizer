@@ -14,7 +14,11 @@ class Anonymizer:
 
         # this for django contrib.auth.models or can be used
         # as single file for describing all models to anonymize
-        __import__('anonymizer.base')
+        try:
+            __import__('anonymizer.base')
+        except ImportError:
+            # anyway maybe for your case it no needed
+            pass
 
         for app in apps.get_app_configs():
             models_set.update(

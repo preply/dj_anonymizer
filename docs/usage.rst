@@ -43,7 +43,10 @@ Example::
     from django.contrib.auth.models import User
     from django.contrib.auth.hashers import make_password
 
-    from dj_anonymizer.register_models import AnonymBase, register_anonym
+    from dj_anonymizer.register_models import (
+        AnonymBase,
+        register_anonym
+    )
     from dj_anonymizer import anonym_field
 
     from faker import Factory
@@ -60,7 +63,7 @@ Example::
         email = anonym_field.string("test_email_{seq}@preply.com",
                                     seq_callback=datetime.now)
         username = anonym_field.string("user_name{seq}")
-        is_staff = False
+        is_staff = anonym_field.function(lambda: False)
         password = make_password("some_test_password", hasher="sha1")
 
         class Meta:

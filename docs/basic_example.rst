@@ -17,11 +17,14 @@ So you can set all names as "Jon Dou (n)".
 
 To anonymize your models go through the following steps:
 
-* Create file e.g. `anonymization.py` in `my_app`.
-* In `anonymization.py` file::
+* Create folder `anonymizer` and file `my_app.py` in it.
+* In `my_app.py` file::
 
-    from dj_anonymizer.register_models import AnonymBase, register_anonym, \
+    from dj_anonymizer.register_models import (
+        AnonymBase,
+        register_anonym,
         register_skip
+    )
     from dj_anonymizer import anonym_field
     from my_app import Author, Book
 
@@ -39,4 +42,6 @@ To anonymize your models go through the following steps:
 
 * Run::
 
-    $ manage.py anonymize_db
+    $ manage.py anonymize_db --soft_mode
+
+**Note** soft_mode here means that you no need to register all models before anonymization.
