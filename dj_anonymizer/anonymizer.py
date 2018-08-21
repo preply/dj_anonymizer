@@ -11,11 +11,21 @@ class Anonymizer:
 
     def __init__(self, soft_mode=True):
         models_set = set()
+
+        # this for django contrib.auth.models or can be used
+        # as single file for describing all models to anonymize
+        __import__('anonymizer.base')
+
         for app in apps.get_app_configs():
             models_set.update(
                 model.__module__ + '.' + model.__name__
                 for model in app.get_models()
             )
+            try:
+                __import__('anonymizer' + '.' + app.name)
+            except ImportError:
+                # we just skip cases where not exist file for app
+                pass
 
         all_models = set(
             self.skip_models +
