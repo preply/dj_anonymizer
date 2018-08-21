@@ -1,18 +1,26 @@
 from __future__ import absolute_import
 
-from dj_anonymizer import anonym_field
-from dj_anonymizer.register_models import AnonymBase, register_anonym
+import datetime
 
-from polls.models import Question, Choice
+from dj_anonymizer import anonym_field
+from dj_anonymizer.register_models import (
+    AnonymBase,
+    register_anonym,
+    register_skip
+)
+from polls.models import Choice, Question
 
 
 class QuestionAnonym(AnonymBase):
     question_text = anonym_field.string("Jon Dou {seq}")
-
-    class Meta:
-        exclude_fields = ["pub_date"]
+    pub_date = anonym_field.function(datetime.datetime.now)
 
 
 register_anonym([
     (Question, QuestionAnonym),
+])
+
+
+register_skip([
+    Choice
 ])
