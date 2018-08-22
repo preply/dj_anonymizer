@@ -9,5 +9,8 @@ class MyAppConf(AppConf):
     # Size of chunks what will be used to update data in table.
     UPDATE_BATCH_SIZE = 500
 
+    # Default folder with model definitions
+    MODEL_DEFINITION_DIR = 'anonymizer'
+
     class Meta:
         prefix = 'anonymizer'
