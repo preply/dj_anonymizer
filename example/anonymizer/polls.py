@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import datetime
 
 from dj_anonymizer import anonym_field

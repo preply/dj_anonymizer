@@ -20,5 +20,5 @@ class Command(BaseCommand):
         if options['action'] is None or options['action'] == 'clean':
             anonymizer.clean()
         end = time.time()
-        print '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='
-        print 'Total time (sec.): {}'.format(end - start)
+        print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
+        print('Total time (sec.): {}'.format(end - start))

@@ -37,8 +37,8 @@ class Anonymizer:
 
         all_models = set(
             self.skip_models +
-            self.anonym_models.keys() +
-            self.clean_models.keys()
+            list(self.anonym_models.keys()) +
+            list(self.clean_models.keys())
         )
 
         if not soft_mode and not models_set.issubset(all_models):
@@ -47,8 +47,8 @@ class Anonymizer:
                     list(models_set.difference(all_models))))
 
     def anonymize(self):
-        print 'Updating started'
-        for anonym_cls in self.anonym_models.values():
+        print('Updating started')
+        for anonym_cls in list(self.anonym_models.values()):
 
             if not anonym_cls.get_fields_names():
                 continue
@@ -57,9 +57,9 @@ class Anonymizer:
                 *anonym_cls.get_fields_names()
             )
 
-            print '\nGenerating fake values for model "{}"'.format(
+            print('\nGenerating fake values for model "{}"'.format(
                 queryset.model.__name__
-            )
+            ))
 
             i = 0
             total = queryset.count()
@@ -78,11 +78,11 @@ class Anonymizer:
                 bulk_update(sub_set,
                             batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                             update_fields=anonym_cls.get_fields_names())
-        print '\n\nUpdating finished'
+        print('\n\nUpdating finished')
 
     def clean(self):
-        print '\nCleaning started\n'
+        print('\nCleaning started\n')
         for queryset in self.clean_models.values():
-            print 'Cleaning "{}" ...'.format(queryset.model.__name__)
+            print('Cleaning "{}" ...'.format(queryset.model.__name__))
             queryset.delete()
-        print '\nCleaning finished'
+        print('\nCleaning finished')
