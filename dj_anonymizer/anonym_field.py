@@ -3,10 +3,7 @@ import itertools
 from django.template.defaultfilters import slugify
 
 
-def function(callback, args=(), kwargs=None):
-    if kwargs is None:
-        kwargs = {}
-
+def function(callback, *args, **kwargs):
     for _ in itertools.count():
         yield callback(*args, **kwargs)
 

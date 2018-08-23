@@ -1,11 +1,7 @@
 from django.apps import apps
-
 from django_bulk_update.helper import bulk_update
 
-from .defaults import (
-    ANONYMIZER_SELECT_BATCH_SIZE,
-    ANONYMIZER_UPDATE_BATCH_SIZE
-)
+from dj_anonymizer.conf import settings
 
 
 class Anonymizer:
@@ -15,11 +11,29 @@ class Anonymizer:
 
     def __init__(self, soft_mode=True):
         models_set = set()
+
+        # this for django contrib.auth.models or can be used
+        # as single file for defining all models to anonymize
+        try:
+            __import__(
+                settings.ANONYMIZER_MODEL_DEFINITION_DIR + '.' + 'base'
+            )
+        except ImportError:
+            # anyway maybe for your case it no needed
+            pass
+
         for app in apps.get_app_configs():
             models_set.update(
                 model.__module__ + '.' + model.__name__
                 for model in app.get_models()
             )
+            try:
+                __import__(
+                    settings.ANONYMIZER_MODEL_DEFINITION_DIR + '.' + app.name
+                )
+            except ImportError:
+                # we just skip cases where not exist file for app
+                pass
 
         all_models = set(
             self.skip_models +
@@ -49,7 +63,8 @@ class Anonymizer:
 
             i = 0
             total = queryset.count()
-            for j in range(0, total, ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
+            for j in range(0, total,
+                           settings.ANONYMIZER_SELECT_BATCH_SIZE) + [None]:
                 sub_set = queryset.order_by('pk')[i:j]
                 for model in sub_set:
                     i += 1
@@ -61,7 +76,7 @@ class Anonymizer:
                             )
 
                 bulk_update(sub_set,
-                            batch_size=ANONYMIZER_UPDATE_BATCH_SIZE,
+                            batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                             update_fields=anonym_cls.get_fields_names())
         print '\n\nUpdating finished'
 

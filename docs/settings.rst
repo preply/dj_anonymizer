@@ -20,3 +20,13 @@ default value is 20000.
 Size of chunks what will be used to update data in table.
 
 default value is 500.
+
+``ANONYMIZER_MODEL_DEFINITION_DIR``
+--------------------------------
+
+**Optional**
+
+Default folder with model definitions.
+
+default value is 'anonymizer'.
+

@@ -43,8 +43,12 @@ Example::
     from django.contrib.auth.models import User
     from django.contrib.auth.hashers import make_password
 
-    from dj_anonymizer import register_anonym, AnonymBase, \
-        anonym_field
+    from dj_anonymizer.register_models import (
+        AnonymBase,
+        register_anonym
+    )
+    from dj_anonymizer import anonym_field
+
     from faker import Factory
 
 
@@ -59,7 +63,7 @@ Example::
         email = anonym_field.string("test_email_{seq}@preply.com",
                                     seq_callback=datetime.now)
         username = anonym_field.string("user_name{seq}")
-        is_staff = False
+        is_staff = anonym_field.function(lambda: False)
         password = make_password("some_test_password", hasher="sha1")
 
         class Meta:
@@ -83,13 +87,13 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
-.. function:: anonym_field.function(callback, args=(), kwargs=None)
+.. function:: anonym_field.function(callback, *arg, **kwargs)
 
     Result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
 
     * `callback` - function which will generate data for the model
-    * `args` - tuple of args for `callback`
-    * `kwargs` - dict of args for `callback`
+    * `*args` - tuple of args for `callback`
+    * `**kwargs` - dict of args for `callback`
 
 .. function:: anonym_field.string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True)
 
@@ -112,7 +116,7 @@ Example 1 - delete all data from model `User`::
 
     from django.contrib.auth.models import User
 
-    from dj_anonymizer import register_clean
+    from dj_anonymizer.register_models import register_clean
 
 
     register_clean(User)
@@ -121,7 +125,8 @@ Example 2 - delete all data from model `User`, except user with id=1::
 
     from django.contrib.auth.models import User
 
-    from dj_anonymizer import AnonymBase, register_clean
+    from dj_anonymizer.register_models import AnonymBase
+    from dj_anonymizer.register_models import register_clean
 
 
     class UserAnonym(AnonymBase):

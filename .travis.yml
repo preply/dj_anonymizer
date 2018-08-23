@@ -3,9 +3,13 @@ language: python
 python:
   - "2.7"
 
+before_install:
+  - export DJANGO_SETTINGS_MODULE=tests.settings
+
 install:
-  - pip install -r requirements/ci.txt
+  - pip install -r requirements.txt
 
 script:
   - flake8 .
   - isort -c
+  - python -m pytest
