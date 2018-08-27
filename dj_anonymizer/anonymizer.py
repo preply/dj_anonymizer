@@ -1,3 +1,5 @@
+import os
+
 from django.apps import apps
 from django_bulk_update.helper import bulk_update
 
@@ -14,26 +16,26 @@ class Anonymizer:
 
         # this for django contrib.auth.models or can be used
         # as single file for defining all models to anonymize
-        try:
+        path_to_base_file = os.path.join(
+            settings.ANONYMIZER_MODEL_DEFINITION_DIR, 'base.py')
+
+        if os.path.isfile(os.path.abspath(path_to_base_file)):
             __import__(
                 settings.ANONYMIZER_MODEL_DEFINITION_DIR + '.' + 'base'
             )
-        except ImportError:
-            # anyway maybe for your case it no needed
-            pass
 
         for app in apps.get_app_configs():
             models_set.update(
                 model.__module__ + '.' + model.__name__
                 for model in app.get_models()
             )
-            try:
+            path_to_file = os.path.join(
+                settings.ANONYMIZER_MODEL_DEFINITION_DIR, '%s.py' % app.name)
+
+            if os.path.isfile(os.path.abspath(path_to_file)):
                 __import__(
                     settings.ANONYMIZER_MODEL_DEFINITION_DIR + '.' + app.name
                 )
-            except ImportError:
-                # we just skip cases where not exist file for app
-                pass
 
         all_models = set(
             self.skip_models +
