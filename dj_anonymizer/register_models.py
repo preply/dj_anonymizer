@@ -7,7 +7,7 @@ from django.db.models.fields.related import (
     OneToOneField
 )
 
-from anonymizer import Anonymizer
+from dj_anonymizer.anonymizer import Anonymizer
 
 
 class AnonymBase:
