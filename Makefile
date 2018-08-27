@@ -16,4 +16,7 @@ test: ## run unittests
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m pytest
 
-all: isort_check_only flake8 test ## make all checks
+test_project: ## check if example project start without errors - for dev env only
+	cd example && python manage.py migrate && python manage.py anonymize_db
+
+all: isort_check_only flake8 test test_project ## make all checks
