@@ -13,9 +13,6 @@ matrix:
     - env: TOXENV=flake8
     - env: TOXENV=isort
 
-before_install:
-  - export DJANGO_SETTINGS_MODULE=tests.settings
-
 install:
   - pip install tox
 
