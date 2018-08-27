@@ -10,3 +10,4 @@ This is first release with changelog
 * Improvement: add .editorconfig
 * Improvement: add tests
 * Docs: docs released
+* Python3: Python 3 support
