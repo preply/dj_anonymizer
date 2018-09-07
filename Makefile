@@ -16,6 +16,10 @@ test: ## run unittests
 	DJANGO_SETTINGS_MODULE=tests.settings \
 		python -m pytest
 
+coverage: ## run coverage
+	DJANGO_SETTINGS_MODULE=tests.settings \
+		python -m pytest --cov=dj_anonymizer tests/
+
 test_project: ## check if example project start without errors - for dev env only
 	cd example && python manage.py migrate && python manage.py anonymize_db
 
