@@ -1,4 +1,4 @@
-dj_anonymizer [![Build Status](https://travis-ci.com/knowledge-point/dj_anonymizer.svg?branch=master)](https://travis-ci.com/knowledge-point/dj_anonymizer) [![PyPI version](https://badge.fury.io/py/dj_anonymizer.svg)](https://badge.fury.io/py/dj_anonymizer)
+dj_anonymizer [![Build Status](https://travis-ci.com/knowledge-point/dj_anonymizer.svg?branch=master)](https://travis-ci.com/knowledge-point/dj_anonymizer) [![codecov.io](http://codecov.io/github/knowledge-point/dj_anonymizer/coverage.svg?branch=master)](http://codecov.io/github/mirumee/saleor?branch=master) [![PyPI version](https://badge.fury.io/py/dj_anonymizer.svg)](https://badge.fury.io/py/dj_anonymizer)
 ==================================
 dj_anonymizer requires Django 1.11 or greater and Python 2.7 or greater.
 This project helps anonymize production database with fake data of any kind.
