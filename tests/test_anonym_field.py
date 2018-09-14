@@ -26,8 +26,16 @@ def test_function():
 @pytest.mark.parametrize(
     '''field_value, seq_start, seq_step, seq_callback, seq_slugify,
        expeted_1, expeted_2''', [
-        ("username_{seq}", 0, 1, None, True, "username_0", "username_1"),
-        ("username_{seq}", 5, 10, None, True, "username_5", "username_15"),
+        ("username_{seq}", 0, 1, None,
+         True, "username_0", "username_1"),
+        ("username_{seq}", 5, 10, None,
+         True, "username_5", "username_15"),
+        ("username_{seq}", 5, 10, lambda: "val",
+         True, "username_val", "username_val"),
+        ("username_{seq}", 5, 10, lambda: "va l",
+         True, "username_va-l", "username_va-l"),
+        ("username_{seq}", 5, 10, lambda: "va l",
+         False, "username_va l", "username_va l"),
     ]
 )
 def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
