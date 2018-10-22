@@ -12,7 +12,7 @@ from polls.models import Choice, Question
 
 
 class QuestionAnonym(AnonymBase):
-    question_text = anonym_field.string("Jon Dou {seq}")
+    question_text = anonym_field.string("John Doe {seq}")
     pub_date = anonym_field.function(datetime.datetime.now)
 
 
