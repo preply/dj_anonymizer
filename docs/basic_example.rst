@@ -13,7 +13,7 @@ For example you have django project with app `my_app` and **models.py** file::
         authors = models.ManyToManyField(Author)
 
 You want to anonymize authors' names.
-So you can set all names as "Jon Dou (n)".
+So you can set all names as "John Doe (n)".
 
 To anonymize your models go through the following steps:
 
@@ -30,7 +30,7 @@ To anonymize your models go through the following steps:
 
 
     class AuthorAnonym(AnonymBase):
-       name = anonym_field.string("Jon Dou {seq}")
+       name = anonym_field.string("John Doe {seq}")
 
        class Meta:
            exclude_fields = ["birth_date"]
