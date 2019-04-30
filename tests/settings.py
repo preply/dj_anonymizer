@@ -34,6 +34,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+]
+
 ROOT_URLCONF = 'test_app.urls'
 
 TEMPLATES = [
