@@ -89,7 +89,7 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
-.. function:: anonym_field.function(callback, *arg, **kwargs)
+.. function:: anonym_field.function(callback, *args, **kwargs)
 
     Result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
 
