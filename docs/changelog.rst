@@ -1,5 +1,8 @@
 Changelog
 =============
+Unreleased
+----------
+* Feature: new field - password
 
 0.2.0
 ----------
