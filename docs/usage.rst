@@ -41,7 +41,6 @@ Example::
     from datetime import datetime
 
     from django.contrib.auth.models import User
-    from django.contrib.auth.hashers import make_password
 
     from dj_anonymizer.register_models import (
         AnonymBase,
@@ -60,11 +59,14 @@ Example::
     class UserAnonym(AnonymBase):
         last_name = anonym_field.function(fake.last_name)
         first_name = anonym_field.function(fake.first_name)
-        email = anonym_field.string("test_email_{seq}@preply.com",
-                                    seq_callback=datetime.now)
+        email = anonym_field.string(
+            "test_email_{seq}@preply.com", seq_callback=datetime.now
+        )
         username = anonym_field.string("user_name{seq}")
         is_staff = anonym_field.function(lambda: False)
-        password = make_password("some_test_password", hasher="sha1")
+        password = anonym_field.password(
+            "some_test_password", salt='salt', hasher="sha1"
+        )
 
         class Meta:
             # anonymize all users except the first one
@@ -87,13 +89,19 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
-.. function:: anonym_field.function(callback, *arg, **kwargs)
+.. function:: anonym_field.function(callback, *args, **kwargs)
 
     Result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
 
     * `callback` - function which will generate data for the model
     * `*args` - tuple of args for `callback`
     * `**kwargs` - dict of args for `callback`
+
+.. function:: anonym_field.password(password, *args, **kwargs)
+
+    Gives the possibility to set the same password to all anonymized dump. Args and kwargs are the same as for `make_password <https://docs.djangoproject.com/en/dev/topics/auth/passwords/#django.contrib.auth.hashers.make_password>`_.
+
+    * `password` - password in plain-text format
 
 .. function:: anonym_field.string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True)
 

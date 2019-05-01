@@ -49,3 +49,19 @@ def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
     )
     assert next(username_field) == expeted_1
     assert next(username_field) == expeted_2
+
+
+@pytest.mark.parametrize(
+    '''password, salt, hasher, expected_1, expected_2''', [
+        ('password', '111', 'md5',
+         'md5$111$d7fe5ea5ff97cc7c2c79e2df5eb7cf93',
+         'md5$111$d7fe5ea5ff97cc7c2c79e2df5eb7cf93'),
+        ('password', None, 'unsalted_md5',
+         '5f4dcc3b5aa765d61d8327deb882cf99',
+         '5f4dcc3b5aa765d61d8327deb882cf99'),
+    ]
+)
+def test_password(password, salt, hasher, expected_1, expected_2):
+    password_field = anonym_field.password(password, salt=salt, hasher=hasher)
+    assert next(password_field) == expected_1
+    assert next(password_field) == expected_2

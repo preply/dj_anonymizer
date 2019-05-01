@@ -1,11 +1,17 @@
 import itertools
 
+from django.contrib.auth.hashers import make_password
 from django.template.defaultfilters import slugify
 
 
 def function(callback, *args, **kwargs):
     for _ in itertools.count():
         yield callback(*args, **kwargs)
+
+
+def password(password, *args, **kwargs):
+    for _ in itertools.count():
+        yield make_password(password, *args, **kwargs)
 
 
 def string(field_value, seq_start=0, seq_step=1, seq_callback=None,
