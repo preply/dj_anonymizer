@@ -20,7 +20,7 @@ setup(
     long_description_content_type='text/markdown',
     license='MIT',
     author='Tim Pagurets',
-    url='https://github.com/knowledge-point/dj_anonymizer',
+    url='https://github.com/preply/dj_anonymizer',
     keywords=['django', 'data', 'database', 'anonymization', 'dj-anonymizer'],
     classifiers=[
         'Development Status :: 4 - Beta',
