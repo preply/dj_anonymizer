@@ -62,25 +62,25 @@ class Anonymizer:
             total = queryset.count()
             for j in list(range(0, total,
                           settings.ANONYMIZER_SELECT_BATCH_SIZE)) + [None]:
-                sub_set = queryset.order_by('pk')[i:j]
-                for model in sub_set:
+                subset = queryset.order_by('pk')[i:j]
+                for obj in subset:
                     i += 1
 
                     for name in anonym_cls.get_fields_names():
-                        if getattr(model, name) or anonym_cls.Meta.fill_empty:
-                            setattr(model, name, next(
+                        if getattr(obj, name) or anonym_cls.Meta.fill_empty:
+                            setattr(obj, name, next(
                                 getattr(anonym_cls, name))
                             )
 
                 if django.__version__ <= '2.2':
                     bulk_update(
-                        sub_set,
+                        subset,
                         batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                         update_fields=anonym_cls.get_fields_names()
                     )
                 else:
-                    sub_set.model.objects.bulk_update(
-                        sub_set,
+                    subset.model.objects.bulk_update(
+                        subset,
                         anonym_cls.get_fields_names(),
                         batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                     )
