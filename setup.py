@@ -46,6 +46,8 @@ setup(
     ],
     install_requires=[
         'Django>=1.11',
-        'django-bulk-update==2.2.0'
-    ]
+    ],
+    extras_require={
+        'bulk': ['django-bulk-update>=2.2,<=2.3'],
+    }
 )

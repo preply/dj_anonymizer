@@ -10,6 +10,9 @@ The recommended way to install dj_anonymizer is via pip_::
 
 .. _pip: https://pip.pypa.io/
 
+**Note** For compatibility with Django < 2.2 also need to be installed `django-bulk-update`. It can be done manually or via command below::
+
+    $ pip install dj-anonymizer[bulk]
 
 Register the application
 ------------------------
