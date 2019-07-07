@@ -67,10 +67,9 @@ class Anonymizer:
                     i += 1
 
                     for name in anonym_cls.get_fields_names():
-                        if getattr(obj, name) or anonym_cls.Meta.fill_empty:
-                            setattr(obj, name, next(
-                                getattr(anonym_cls, name))
-                            )
+                        setattr(obj, name, next(
+                            getattr(anonym_cls, name))
+                        )
 
                 if django.__version__ <= '2.2':
                     bulk_update(

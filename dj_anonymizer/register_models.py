@@ -38,9 +38,6 @@ class AnonymBase:
 
         cls.Meta.exclude_fields.extend(relation_fields)
 
-        if not hasattr(cls.Meta, 'fill_empty'):
-            setattr(cls.Meta, 'fill_empty', False)
-
     class Meta:
         pass
 
