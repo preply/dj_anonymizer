@@ -68,15 +68,14 @@ def register_anonym(models):
 
         if specified_fields < model_fields:
             raise LookupError(
-                'Fields {} were not registered in {} class for {} model:'
+                'Fields {} were not registered in {} class for {} model'
                 .format(list(model_fields - specified_fields),
                         cls_anonym.__name__,
                         model.__name__)
             )
         if specified_fields > model_fields:
             raise LookupError(
-                'Fields {} are present in {} class, but do not exist' +
-                'in {} model'
+                'Fields {} present in {} class, but does not exist in {} model'
                 .format(list(specified_fields - model_fields),
                         cls_anonym.__name__,
                         model.__name__)
