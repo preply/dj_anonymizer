@@ -1,6 +1,6 @@
 Changelog
 =============
-Unreleased
+0.3.0
 ----------
 * Feature: new field - password (`#25 <https://github.com/preply/dj_anonymizer/pull/25>`__)
 * Feature: Since Django 2.2 used native bulk_update. django-bulk-update as optional dependency. (`#25 <https://github.com/preply/dj_anonymizer/pull/29>`__)
