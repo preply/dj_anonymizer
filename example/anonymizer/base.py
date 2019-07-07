@@ -22,7 +22,7 @@ class UserAnonym(AnonymBase):
                                    seq_callback=datetime.datetime.now)
     first_name = anonym_field.string('first name {seq}')
     last_name = anonym_field.string('last name {seq}')
-    password = anonym_field.string('password')
+    password = anonym_field.password('password')
     is_staff = anonym_field.function(lambda: False)
 
     class Meta:
