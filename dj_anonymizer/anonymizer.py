@@ -1,8 +1,16 @@
-from django.apps import apps
-from django_bulk_update.helper import bulk_update
+import django
 
 from dj_anonymizer.conf import settings
 from dj_anonymizer.utils import import_if_exist
+
+if django.__version__ <= '2.2':
+    try:
+        from django_bulk_update.helper import bulk_update
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError(
+            "Django %s does not have native support for bulk_update and "
+            "django_bulk_update is not installed""" % django.__version__
+        )
 
 
 class Anonymizer:
@@ -17,7 +25,7 @@ class Anonymizer:
         # as single file for defining all models to anonymize
         import_if_exist('base')
 
-        for app in apps.get_app_configs():
+        for app in django.apps.apps.get_app_configs():
             models_set.update(
                 model.__module__ + '.' + model.__name__
                 for model in app.get_models()
@@ -64,9 +72,18 @@ class Anonymizer:
                                 getattr(anonym_cls, name))
                             )
 
-                bulk_update(sub_set,
-                            batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
-                            update_fields=anonym_cls.get_fields_names())
+                if django.__version__ <= '2.2':
+                    bulk_update(
+                        sub_set,
+                        batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
+                        update_fields=anonym_cls.get_fields_names()
+                    )
+                else:
+                    sub_set.model.objects.bulk_update(
+                        sub_set,
+                        anonym_cls.get_fields_names(),
+                        batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
+                    )
         print('\n\nUpdating finished')
 
     def clean(self):
