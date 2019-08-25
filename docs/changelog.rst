@@ -1,5 +1,9 @@
 Changelog
 =============
+0.3.1
+----------
+* Bugfix: for Django==2.2 dj_anonymizer raise ModuleNotFoundError (`#32 <https://github.com/preply/dj_anonymizer/pull/32>`__)
+
 0.3.0
 ----------
 * Feature: new field - password (`#25 <https://github.com/preply/dj_anonymizer/pull/25>`__)
