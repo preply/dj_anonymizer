@@ -4,7 +4,7 @@ from dj_anonymizer.conf import settings
 from dj_anonymizer.utils import import_if_exist
 
 
-if django.__version__ <= '2.2':
+if django.__version__ < '2.2':
     try:
         from django_bulk_update.helper import bulk_update
     except ModuleNotFoundError:
