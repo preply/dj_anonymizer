@@ -25,12 +25,12 @@ To anonymize your models go through the following steps:
         register_anonym,
         register_skip
     )
-    from dj_anonymizer import anonym_field
+    from dj_anonymizer import fields
     from my_app import Author, Book
 
 
     class AuthorAnonym(AnonymBase):
-       name = anonym_field.string("John Doe {seq}")
+       name = fields.string("John Doe {seq}")
 
        class Meta:
            exclude_fields = ["birth_date"]

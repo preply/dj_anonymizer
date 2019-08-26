@@ -1,6 +1,6 @@
 import pytest
 
-from dj_anonymizer import anonym_field
+from dj_anonymizer import fields
 
 
 def test_function():
@@ -10,16 +10,16 @@ def test_function():
             result += kwargs['addition']
         return result
 
-    function_field = anonym_field.function(base_func)
+    function_field = fields.function(base_func)
     assert next(function_field) == 0
 
-    function_field = anonym_field.function(base_func, 1)
+    function_field = fields.function(base_func, 1)
     assert next(function_field) == 1
 
-    function_field = anonym_field.function(base_func, 1, 2)
+    function_field = fields.function(base_func, 1, 2)
     assert next(function_field) == 3
 
-    function_field = anonym_field.function(base_func, 1, 2, addition=3)
+    function_field = fields.function(base_func, 1, 2, addition=3)
     assert next(function_field) == 6
 
 
@@ -40,7 +40,7 @@ def test_function():
 )
 def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
                 expeted_1, expeted_2):
-    username_field = anonym_field.string(
+    username_field = fields.string(
         field_value=field_value,
         seq_start=seq_start,
         seq_step=seq_step,
@@ -62,6 +62,6 @@ def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
     ]
 )
 def test_password(password, salt, hasher, expected_1, expected_2):
-    password_field = anonym_field.password(password, salt=salt, hasher=hasher)
+    password_field = fields.password(password, salt=salt, hasher=hasher)
     assert next(password_field) == expected_1
     assert next(password_field) == expected_2
