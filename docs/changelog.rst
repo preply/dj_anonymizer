@@ -1,5 +1,9 @@
 Changelog
 =============
+Unreleased
+----------
+* Improvement: rename `anonym_field` to `fields` for more convenience (`#34 <https://github.com/preply/dj_anonymizer/pull/34>`__)
+
 0.3.1
 ----------
 * Bugfix: for Django==2.2 dj_anonymizer raise ModuleNotFoundError (`#32 <https://github.com/preply/dj_anonymizer/pull/32>`__)
