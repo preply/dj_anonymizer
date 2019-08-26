@@ -72,7 +72,7 @@ class Anonymizer:
                             getattr(anonym_cls, name))
                         )
 
-                if django.__version__ <= '2.2':
+                if django.__version__ < '2.2':
                     bulk_update(
                         subset,
                         batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
