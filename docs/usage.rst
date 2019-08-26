@@ -46,7 +46,7 @@ Example::
         AnonymBase,
         register_anonym
     )
-    from dj_anonymizer import anonym_field
+    from dj_anonymizer import fields
 
     from faker import Factory
 
@@ -57,14 +57,14 @@ Example::
 
     # create anonymizer class
     class UserAnonym(AnonymBase):
-        last_name = anonym_field.function(fake.last_name)
-        first_name = anonym_field.function(fake.first_name)
-        email = anonym_field.string(
+        last_name = fields.function(fake.last_name)
+        first_name = fields.function(fake.first_name)
+        email = fields.string(
             "test_email_{seq}@preply.com", seq_callback=datetime.now
         )
-        username = anonym_field.string("user_name{seq}")
-        is_staff = anonym_field.function(lambda: False)
-        password = anonym_field.password(
+        username = fields.string("user_name{seq}")
+        is_staff = fields.function(lambda: False)
+        password = fields.password(
             "some_test_password", salt='salt', hasher="sha1"
         )
 
@@ -89,7 +89,7 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
-.. function:: anonym_field.function(callback, *args, **kwargs)
+.. function:: fields.function(callback, *args, **kwargs)
 
     Result of execution of `callback` function will be set to the model field. `callback` function will be called for every record of your model.
 
@@ -97,13 +97,13 @@ dj_anonymizer provides certain helpful field types for anonymization classes:
     * `*args` - tuple of args for `callback`
     * `**kwargs` - dict of args for `callback`
 
-.. function:: anonym_field.password(password, *args, **kwargs)
+.. function:: fields.password(password, *args, **kwargs)
 
     Gives the possibility to set the same password to all anonymized dump. Args and kwargs are the same as for `make_password <https://docs.djangoproject.com/en/dev/topics/auth/passwords/#django.contrib.auth.hashers.make_password>`_.
 
     * `password` - password in plain-text format
 
-.. function:: anonym_field.string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True)
+.. function:: fields.string(field_value, seq_start=0, seq_step=1, seq_callback=None, seq_args=(), seq_kwargs=None, seq_slugify=True)
 
     Generate string for every record of the model.
 

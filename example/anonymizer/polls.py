@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import datetime
 
-from dj_anonymizer import anonym_field
+from dj_anonymizer import fields
 from dj_anonymizer.register_models import (
     AnonymBase,
     register_anonym,
@@ -12,8 +12,8 @@ from polls.models import Choice, Question
 
 
 class QuestionAnonym(AnonymBase):
-    question_text = anonym_field.string("John Doe {seq}")
-    pub_date = anonym_field.function(datetime.datetime.now)
+    question_text = fields.string("John Doe {seq}")
+    pub_date = fields.function(datetime.datetime.now)
 
 
 register_anonym([
