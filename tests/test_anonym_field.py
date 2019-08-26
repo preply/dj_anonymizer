@@ -25,7 +25,7 @@ def test_function():
 
 @pytest.mark.parametrize(
     '''field_value, seq_start, seq_step, seq_callback, seq_slugify,
-       expeted_1, expeted_2''', [
+       expected_1, expected_2''', [
         ("username_{seq}", 0, 1, None,
          True, "username_0", "username_1"),
         ("username_{seq}", 5, 10, None,
@@ -39,7 +39,7 @@ def test_function():
     ]
 )
 def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
-                expeted_1, expeted_2):
+                expected_1, expected_2):
     username_field = fields.string(
         field_value=field_value,
         seq_start=seq_start,
@@ -47,8 +47,8 @@ def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
         seq_callback=seq_callback,
         seq_slugify=seq_slugify
     )
-    assert next(username_field) == expeted_1
-    assert next(username_field) == expeted_2
+    assert next(username_field) == expected_1
+    assert next(username_field) == expected_2
 
 
 @pytest.mark.parametrize(
