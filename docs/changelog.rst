@@ -4,7 +4,7 @@ Unreleased
 ----------
 Breaking:
 
-* Improvement: removed `register_clean_with_rules` method which now covered via `register_clean` (`#35 <https://github.com/preply/dj_anonymizer/pull/35>`__)
+* Improvement: removed `register_clean_with_rules` method which now covered via `register_clean` (`#39 <https://github.com/preply/dj_anonymizer/pull/39>`__)
 * Improvement: rename `anonym_field` to `fields` for more convenience (`#34 <https://github.com/preply/dj_anonymizer/pull/34>`__)
 
 0.3.1
