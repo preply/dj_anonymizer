@@ -21,7 +21,7 @@ class AnonymBase:
     @classmethod
     def init_meta(cls, model):
         if hasattr(cls.Meta, 'queryset'):
-            if cls.Meta.queryset.model is not model:
+            if cls.Meta.queryset.model not in [model, AnonymBase]:
                 raise TypeError
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
@@ -88,16 +88,11 @@ def register_anonym(models):
 
 
 def register_clean(models):
-    for model in models:
-        queryset = model.objects.all()
+    for model, cls_anonym in models:
+        cls_anonym.init_meta(model)
+        queryset = cls_anonym.Meta.queryset
         Anonymizer.clean_models[model.__module__ +
                                 '.' + model.__name__] = queryset
-
-
-def register_clean_with_rules(model, cls_anonym):
-    cls_anonym.init_meta(model)
-    queryset = cls_anonym.Meta.queryset
-    Anonymizer.clean_models[model.__module__ + '.' + model.__name__] = queryset
 
 
 def register_skip(models):

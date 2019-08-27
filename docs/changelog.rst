@@ -2,6 +2,7 @@ Changelog
 =============
 Unreleased
 ----------
+* Improvement: removed `register_clean_with_rules` which now covered via `register_clean` (`#35 <https://github.com/preply/dj_anonymizer/pull/35>`__)
 * Improvement: rename `anonym_field` to `fields` for more convenience (`#34 <https://github.com/preply/dj_anonymizer/pull/34>`__)
 
 0.3.1

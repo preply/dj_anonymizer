@@ -16,14 +16,7 @@ Model registration
 
     Register models which should be cleaned
 
-    * `models` - list of models, all models data will be deleted.
-
-.. function:: register_clean_with_rules(model, cls_anonym)
-
-    Register model which should be cleaned with usage of some rules
-
-    * `model` - model class
-    * `cls_anonym` - anonymization class, specified queryset of data which must be deleted.
+   * `models` - list of tuples `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - anonymization class, inherited form `AnonymBase` with specified queryset for deletion or just `AnonymBase`.
 
 .. function:: register_skip(models)
 
@@ -124,10 +117,13 @@ Example 1 - delete all data from model `User`::
 
     from django.contrib.auth.models import User
 
+    from dj_anonymizer.register_models import AnonymBase
     from dj_anonymizer.register_models import register_clean
 
 
-    register_clean(User)
+    register_clean([
+        (User, AnonymBase),
+    ])
 
 Example 2 - delete all data from model `User`, except user with id=1::
 
@@ -142,4 +138,6 @@ Example 2 - delete all data from model `User`, except user with id=1::
             queryset = User.objects.exclude(id=1)
 
 
-    register_clean(User, UserAnonym)
+    register_clean([
+        (User, UserAnonym),
+    ])
