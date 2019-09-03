@@ -11,6 +11,11 @@ from dj_anonymizer.anonymizer import Anonymizer
 
 
 class AnonymBase:
+    truncate = None
+
+    def __init__(self, truncate=False):
+        self.truncate = truncate
+
     @classmethod
     def get_fields_names(cls):
         return [
@@ -91,6 +96,7 @@ def register_clean(models):
     for model, cls_anonym in models:
         cls_anonym.init_meta(model)
         queryset = cls_anonym.Meta.queryset
+        queryset.truncate = cls_anonym.truncate
         Anonymizer.clean_models[model.__module__ +
                                 '.' + model.__name__] = queryset
 

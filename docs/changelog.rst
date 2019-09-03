@@ -2,6 +2,9 @@ Changelog
 =============
 Unreleased
 ----------
+
+* Feature: possibility to truncate register_clean tables (`#41 <https://github.com/preply/dj_anonymizer/pull/41>`__)
+
 Breaking:
 
 * Improvement: removed `register_clean_with_rules` method which now covered via `register_clean` (`#39 <https://github.com/preply/dj_anonymizer/pull/39>`__)

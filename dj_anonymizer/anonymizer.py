@@ -1,7 +1,7 @@
 import django
 
 from dj_anonymizer.conf import settings
-from dj_anonymizer.utils import import_if_exist
+from dj_anonymizer.utils import import_if_exist, truncate_table
 
 
 if django.__version__ < '2.2':
@@ -90,5 +90,8 @@ class Anonymizer:
         print('\nCleaning started\n')
         for queryset in self.clean_models.values():
             print('Cleaning "{}" ...'.format(queryset.model.__name__))
-            queryset.delete()
+            if getattr(queryset, 'truncate') is True:
+                truncate_table(queryset.model)
+            else:
+                queryset.delete()
         print('\nCleaning finished')
