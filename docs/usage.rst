@@ -3,6 +3,8 @@ Usage
 
 You must specify all models and all their fields in dj_anonymizer. This helps you to avoid the situation when something has changed in your project models (e.g. some fields with sensitive data were added) and you forget to clean or fake them.
 
+If you don't wan't to specify all models you can use anonymizer with :doc:`- - soft_mode<../run_anonymization>` argument.
+
 Model registration
 ------------------
 
@@ -17,6 +19,8 @@ Model registration
     Register models which should be cleaned
 
    * `models` - list of tuples `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - anonymization class, inherited form `AnonymBase` with specified queryset for deletion or just `AnonymBase`.
+
+   If `AnonymBase` class have `truncate=True`, parameter table will be truncated instead of performing an SQL delete query.
 
 .. function:: register_skip(models)
 
@@ -125,7 +129,19 @@ Example 1 - delete all data from model `User`::
         (User, AnonymBase),
     ])
 
-Example 2 - delete all data from model `User`, except user with id=1::
+Example 2 - truncate all data from model `User`::
+
+    from django.contrib.auth.models import User
+
+    from dj_anonymizer.register_models import AnonymBase
+    from dj_anonymizer.register_models import register_clean
+
+
+    register_clean([
+        (User, AnonymBase(truncate=True)),
+    ])
+
+Example 3 - delete all data from model `User`, except user with id=1::
 
     from django.contrib.auth.models import User
 
