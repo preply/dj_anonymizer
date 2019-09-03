@@ -1,3 +1,4 @@
+import copy
 import inspect
 
 from django.db.models.fields import Field
@@ -49,10 +50,11 @@ class AnonymBase:
 
 def register_anonym(models):
     for model, cls_anonym in models:
-        cls_anonym.init_meta(model)
+        cls_anonym_ = copy.deepcopy(cls_anonym)
+        cls_anonym_.init_meta(model)
 
-        exclude_fields = set(cls_anonym.Meta.exclude_fields)
-        anonym_fields = set(cls_anonym.get_fields_names())
+        exclude_fields = set(cls_anonym_.Meta.exclude_fields)
+        anonym_fields = set(cls_anonym_.get_fields_names())
 
         model_fields = set(
             field.name for field in model._meta.get_fields()
@@ -72,31 +74,32 @@ def register_anonym(models):
             raise LookupError(
                 'Fields {} were not registered in {} class for {} model'
                 .format(list(model_fields - specified_fields),
-                        cls_anonym.__name__,
+                        cls_anonym_.__name__,
                         model.__name__)
             )
         if specified_fields > model_fields:
             raise LookupError(
                 'Fields {} present in {} class, but does not exist in {} model'
                 .format(list(specified_fields - model_fields),
-                        cls_anonym.__name__,
+                        cls_anonym_.__name__,
                         model.__name__)
             )
         if specified_fields != model_fields:
             raise LookupError(
                 'Fields in {} are not the same as in {}. Check spelling'
-                .format(cls_anonym.__name__, model.__name__)
+                .format(cls_anonym_.__name__, model.__name__)
             )
 
         Anonymizer.anonym_models[model.__module__ +
-                                 '.' + model.__name__] = cls_anonym
+                                 '.' + model.__name__] = cls_anonym_
 
 
 def register_clean(models):
     for model, cls_anonym in models:
-        cls_anonym.init_meta(model)
-        queryset = cls_anonym.Meta.queryset
-        queryset.truncate = cls_anonym.truncate
+        cls_anonym_ = copy.deepcopy(cls_anonym)
+        cls_anonym_.init_meta(model)
+        queryset = cls_anonym_.Meta.queryset
+        queryset.truncate = cls_anonym_.truncate
         Anonymizer.clean_models[model.__module__ +
                                 '.' + model.__name__] = queryset
 
