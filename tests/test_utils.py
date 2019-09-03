@@ -1,6 +1,5 @@
 import mock
 import pytest
-
 from django.contrib.auth.models import User
 from django.db import DEFAULT_DB_ALIAS
 from django.test.utils import override_settings
