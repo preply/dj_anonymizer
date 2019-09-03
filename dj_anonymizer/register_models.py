@@ -98,6 +98,7 @@ def register_anonym(models):
 
         Anonymizer.anonym_models[model.__module__ +
                                  '.' + model.__name__] = cls_anonym
+        cls_anonym.clear_meta()
 
 
 def register_clean(models):
