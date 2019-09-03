@@ -1,3 +1,4 @@
+import copy
 import inspect
 
 from django.db.models.fields import Field
@@ -97,7 +98,8 @@ def register_anonym(models):
             )
 
         Anonymizer.anonym_models[model.__module__ +
-                                 '.' + model.__name__] = cls_anonym
+                                 '.' + model.__name__] = \
+            copy.deepcopy(cls_anonym)
         cls_anonym.clear_meta()
 
 
