@@ -43,6 +43,14 @@ class AnonymBase:
 
         cls.Meta.exclude_fields.extend(relation_fields)
 
+    @classmethod
+    def clear_meta(cls):
+        if hasattr(cls.Meta, 'queryset'):
+            delattr(cls.Meta, 'queryset')
+
+        if hasattr(cls.Meta, 'exclude_fields'):
+            delattr(cls.Meta, 'exclude_fields')
+
     class Meta:
         pass
 
@@ -97,6 +105,7 @@ def register_clean(models):
         cls_anonym.init_meta(model)
         queryset = cls_anonym.Meta.queryset
         queryset.truncate = cls_anonym.truncate
+        cls_anonym.clear_meta()
         Anonymizer.clean_models[model.__module__ +
                                 '.' + model.__name__] = queryset
 
