@@ -11,7 +11,7 @@ from dj_anonymizer.anonymizer import Anonymizer
 
 
 class AnonymBase:
-    truncate = None
+    truncate = False
 
     def __init__(self, truncate=False):
         self.truncate = truncate
@@ -42,6 +42,14 @@ class AnonymBase:
         relation_fields.append(model._meta.pk.name)
 
         cls.Meta.exclude_fields.extend(relation_fields)
+
+    @classmethod
+    def clear_meta(cls):
+        if hasattr(cls.Meta, 'queryset'):
+            delattr(cls.Meta, 'queryset')
+
+        if hasattr(cls.Meta, 'exclude_fields'):
+            delattr(cls.Meta, 'exclude_fields')
 
     class Meta:
         pass
@@ -99,6 +107,7 @@ def register_clean(models):
         queryset.truncate = cls_anonym.truncate
         Anonymizer.clean_models[model.__module__ +
                                 '.' + model.__name__] = queryset
+        cls_anonym.clear_meta()
 
 
 def register_skip(models):
