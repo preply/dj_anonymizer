@@ -59,8 +59,15 @@ def register_anonym(models):
     for model, cls_anonym in models:
         cls_anonym.init_meta(model)
 
-        exclude_fields = set(cls_anonym.Meta.exclude_fields)
         anonym_fields = set(cls_anonym.get_fields_names())
+
+        if hasattr(cls_anonym.Meta, 'exclude_fields'):
+            exclude_fields = set(cls_anonym.Meta.exclude_fields)
+        else:
+            exclude_fields = {
+                field.name for field in model._meta.get_fields()
+                if isinstance(field, Field) and field.name not in anonym_fields
+            }
 
         model_fields = set(
             field.name for field in model._meta.get_fields()
