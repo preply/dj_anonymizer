@@ -66,8 +66,7 @@ def register_anonym(models):
         else:
             exclude_fields = {
                 field.name for field in model._meta.get_fields()
-                if isinstance(field, Field) and field.name
-                   not in anonym_fields
+                if isinstance(field, Field) and field.name not in anonym_fields
             }
 
         model_fields = set(
