@@ -82,7 +82,7 @@ Example::
 
 In `class Meta` you can specify `queryset` and `exclude_fields`:
  * `queryset` - model queryset to which anonymization will be applied. If you don't specify this attribute, anonymization will be applied to all rows of model (like `MyModel.objects.all()`)
- * `exclude_fields` - list of model fields which should not be anonymized
+ * `exclude_fields` - list of model fields which should not be anonymized. If you don't specify this attribute, the excluded fields will be inferred automatically
 
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
