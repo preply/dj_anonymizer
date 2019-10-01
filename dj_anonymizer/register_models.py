@@ -24,24 +24,22 @@ class AnonymBase:
         ]
 
     @classmethod
-    def init_meta(cls, model):
-        if hasattr(cls.Meta, 'queryset'):
-            if cls.Meta.queryset.model not in [model, AnonymBase]:
-                raise TypeError
-        else:
-            setattr(cls.Meta, 'queryset', model.objects.all())
-
-        if not hasattr(cls.Meta, 'exclude_fields'):
-            setattr(cls.Meta, 'exclude_fields', [])
-
+    def get_relation_fields(cls, model):
         relation_fields = [field.name for field in model._meta.get_fields()
                            if isinstance(field, (ManyToManyField,
                                                  OneToOneField,
                                                  ForeignKey))
                            ]
         relation_fields.append(model._meta.pk.name)
+        return relation_fields
 
-        cls.Meta.exclude_fields.extend(relation_fields)
+    @classmethod
+    def init_meta(cls, model):
+        if hasattr(cls.Meta, 'queryset'):
+            if cls.Meta.queryset.model not in [model, AnonymBase]:
+                raise TypeError
+        else:
+            setattr(cls.Meta, 'queryset', model.objects.all())
 
     @classmethod
     def clear_meta(cls):
@@ -60,19 +58,17 @@ def register_anonym(models):
         cls_anonym.init_meta(model)
 
         anonym_fields = set(cls_anonym.get_fields_names())
-
-        if hasattr(cls_anonym.Meta, 'exclude_fields'):
-            exclude_fields = set(cls_anonym.Meta.exclude_fields)
-        else:
-            exclude_fields = {
-                field.name for field in model._meta.get_fields()
-                if isinstance(field, Field) and field.name not in anonym_fields
-            }
-
         model_fields = set(
             field.name for field in model._meta.get_fields()
             if isinstance(field, Field)
         )
+
+        if hasattr(cls_anonym.Meta, 'exclude_fields'):
+            exclude_fields = set(cls_anonym.Meta.exclude_fields)
+        else:
+            exclude_fields = model_fields - anonym_fields
+
+        exclude_fields.update(cls_anonym.get_relation_fields(model))
 
         if exclude_fields & anonym_fields:
             raise LookupError(
