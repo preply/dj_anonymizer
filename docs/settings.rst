@@ -8,7 +8,7 @@ This is a list of the settings dj_anonymizer recognizes.
 
 **Optional**
 
-Size of chunks what will be used to select data from table.
+Chunk size that will be used to select data from table.
 
 default value is 20000.
 
@@ -17,7 +17,7 @@ default value is 20000.
 
 **Optional**
 
-Size of chunks what will be used to update data in table.
+Chunk size that will be used to update data in table.
 
 default value is 500.
 

@@ -12,7 +12,7 @@ For example you have django project with app `my_app` and **models.py** file::
         name = models.CharField(max_length=100)
         authors = models.ManyToManyField(Author)
 
-You want to anonymize authors' names.
+You want to anonymize the author's names.
 So you can set all names as "John Doe (n)".
 
 To anonymize your models go through the following steps:

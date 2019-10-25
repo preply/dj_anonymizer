@@ -18,13 +18,13 @@ Breaking:
 0.3.0
 ----------
 * Feature: new field - password (`#25 <https://github.com/preply/dj_anonymizer/pull/25>`__)
-* Feature: Since Django 2.2 used native bulk_update. django-bulk-update as optional dependency. (`#29 <https://github.com/preply/dj_anonymizer/pull/29>`__)
+* Feature: since Django 2.2 used native bulk_update. django-bulk-update as an optional dependency. (`#29 <https://github.com/preply/dj_anonymizer/pull/29>`__)
 
 0.2.0
 ----------
-This is first release with changelog
+This is the first release with changelog
 
-* Improvement: add travis CI with flake8 and isort onboard
+* Improvement: add Travis CI with flake8 and isort onboard
 * Improvement: fix broken .md description on PyPI
 * Improvement: add .editorconfig
 * Improvement: add tests
