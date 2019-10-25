@@ -10,7 +10,7 @@ Base command to run anonymization and clean models::
     $ manage.py anonymize_db --soft_mode
 
 
-``anonymize_db`` also support possibility to separate actions.
+``anonymize_db`` also supports the possibility of separate actions.
 
 
 Run only table cleaning::

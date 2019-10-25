@@ -3,7 +3,7 @@ Usage
 
 You must specify all models and all their fields in dj_anonymizer. This helps you to avoid the situation when something has changed in your project models (e.g. some fields with sensitive data were added) and you forget to clean or fake them.
 
-If you don't wan't to specify all models you can use anonymizer with :doc:`- - soft_mode<../run_anonymization>` argument.
+If you don't want to specify all models you can use anonymizer with :doc:`- - soft_mode<../run_anonymization>` argument.
 
 Model registration
 ------------------
