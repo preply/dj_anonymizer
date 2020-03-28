@@ -14,7 +14,7 @@ flake8: ## run flake8
 
 test: ## run unittests
 	DJANGO_SETTINGS_MODULE=tests.settings \
-		python -m pytest
+		python -m pytest $(scope)
 
 coverage: ## run coverage
 	DJANGO_SETTINGS_MODULE=tests.settings \

@@ -72,8 +72,8 @@ def register_anonym(models):
 
         if exclude_fields & anonym_fields:
             raise LookupError(
-                'Fields {} of model {} are present in both' +
-                'anonymization and excluded lists'
+                '''Fields {} of model {} are present in both'''
+                '''anonymization and excluded lists'''
                 .format(list(exclude_fields & anonym_fields), model.__name__)
             )
 
