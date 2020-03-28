@@ -10,11 +10,19 @@ class Command(BaseCommand):
         parser.add_argument('--action',
                             help='"anonymize" models or "clean" models '
                                  '(default: both actions will be applied)')
-        parser.add_argument('-s', '--soft_mode', action='store_true')
+        parser.add_argument('-s', '--soft_mode', action='store_true',
+                            help='Exception will not be raised if not all '
+                                 'project models are registered')
+        parser.add_argument('-c', '--check_only', action='store_true',
+                            help='Check that all models are registered '
+                                 'correctly')
 
     def handle(self, *args, **options):
         start = time.time()
         anonymizer = Anonymizer(soft_mode=options['soft_mode'])
+        print('Check pass successfully')
+        if options['check_only'] is True:
+            return
         if options['action'] is None or options['action'] == 'anonymize':
             anonymizer.anonymize()
         if options['action'] is None or options['action'] == 'clean':
