@@ -7,7 +7,7 @@ from dj_anonymizer.anonymizer import Anonymizer
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument('--action',
+        parser.add_argument('-a', '--action',
                             help='"anonymize" models or "clean" models '
                                  '(default: both actions will be applied)')
         parser.add_argument('-s', '--soft_mode', action='store_true',
