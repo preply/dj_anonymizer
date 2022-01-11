@@ -5,7 +5,8 @@ Unreleased
 
 * Feature: possibility to truncate register_clean tables (`#41 <https://github.com/preply/dj_anonymizer/pull/41>`__)
 * Feature: infer exclude_fields when property is not set (`#45 <https://github.com/preply/dj_anonymizer/pull/45>`__)
-* Feature: --check-only mode (`#52 <https://github.com/preply/dj_anonymizer/pull/45>`__)
+* Feature: --check-only mode (`#52 <https://github.com/preply/dj_anonymizer/pull/52>`__)
+* Improvement: remove support for EOL Django versions, django-bulk-update is no longer an optional dependency (`#55 <https://github.com/preply/dj_anonymizer/pull/55>`__)
 
 Breaking:
 
