@@ -19,9 +19,12 @@ def import_if_exist(filename):
     Check if file exist in appropriate path and import it
     """
     filepath = os.path.join(settings.ANONYMIZER_MODEL_DEFINITION_DIR, filename)
+    full_filepath = os.path.abspath(filepath + '.py')
 
-    if os.path.isfile(os.path.abspath(filepath + '.py')):
-        importlib.import_module(filepath.replace('/', '.'))
+    if os.path.isfile(full_filepath):
+        spec = importlib.util.spec_from_file_location(filename, full_filepath)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
 
 
 def truncate_table(model):
