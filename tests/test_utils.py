@@ -17,7 +17,7 @@ def test_import_if_exist(mocker, path, expected):
         ANONYMIZER_MODEL_DEFINITION_DIR='example/anonymizer'
     ):
         mocked_import = mock.MagicMock()
-        mocker.patch('importlib.import_module', mocked_import)
+        mocker.patch('importlib.util.spec_from_file_location', mocked_import)
         import_if_exist(path)
         assert mocked_import.called is expected
 
