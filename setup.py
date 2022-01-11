@@ -14,8 +14,8 @@ setup(
     packages=['dj_anonymizer'],
     include_package_data=True,
     version='0.3.1',
-    description='This project helps anonymize production database ' +
-                'with fake data of any kind.',
+    description='This project helps anonymize production database '
+                + 'with fake data of any kind.',
     long_description=(read('README.md')),
     long_description_content_type='text/markdown',
     license='MIT',
@@ -30,24 +30,20 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Framework :: Django',
-        'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.2',
-        'Framework :: Django :: 3.0',
+        'Framework :: Django :: 3.2',
+        'Framework :: Django :: 4.0',
         'Topic :: Database'
     ],
     install_requires=[
-        'Django>=1.11',
-    ],
-    extras_require={
-        'bulk': ['django-bulk-update>=2.2,<=2.3'],
-    }
+        'Django>=2.2',
+    ]
 )
