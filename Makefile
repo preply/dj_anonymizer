@@ -6,7 +6,7 @@ help: ## Show help
 isort: ## run isort and change imports order
 	isort -rc dj_anonymizer example tests
 
-isort_check_only: ## run isort for checking diff
+isort_check_only: ## run isort and show diff
 	isort -rc -c dj_anonymizer example tests
 
 flake8: ## run flake8
