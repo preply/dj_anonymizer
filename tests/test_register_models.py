@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from django.contrib.auth.models import Group, Permission, User
 from django.db.models.query import QuerySet
 
