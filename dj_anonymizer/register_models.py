@@ -37,7 +37,10 @@ class AnonymBase:
     def init_meta(cls, model):
         if hasattr(cls.Meta, 'queryset'):
             if cls.Meta.queryset.model not in [model, AnonymBase]:
-                raise TypeError
+                raise TypeError(
+                    'Class {} does not belong to the allowed list({} {})'
+                    .format(cls.Meta.queryset.model, model, AnonymBase)
+                )
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
 
