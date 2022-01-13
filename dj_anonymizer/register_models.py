@@ -38,8 +38,13 @@ class AnonymBase:
         if hasattr(cls.Meta, 'queryset'):
             if cls.Meta.queryset.model not in [model, AnonymBase]:
                 raise TypeError(
-                    'Class {} does not belong to the allowed list({} {})'
-                    .format(cls.Meta.queryset.model, model, AnonymBase)
+                    'Class {}.{} does not belong to the allowed ({}.{}, {}.{})'
+                    .format(cls.Meta.queryset.model.__module__,
+                            cls.Meta.queryset.model.__name__,
+                            model.__module__,
+                            model.__name__,
+                            AnonymBase.__module__,
+                            AnonymBase.__name__)
                 )
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
@@ -75,31 +80,41 @@ def register_anonym(models):
 
         if exclude_fields & anonym_fields:
             raise LookupError(
-                '''Fields {} of model {} are present in both'''
+                '''Fields {} of model {}.{} are present in both '''
                 '''anonymization and excluded lists'''
-                .format(list(exclude_fields & anonym_fields), model.__name__)
+                .format(list(exclude_fields & anonym_fields),
+                        model.__module__,
+                        model.__name__)
             )
 
         specified_fields = exclude_fields | anonym_fields
 
         if specified_fields < model_fields:
             raise LookupError(
-                'Fields {} were not registered in {} class for {} model'
+                'Fields {} were not registered in {}.{} class for {}.{} model'
                 .format(list(model_fields - specified_fields),
+                        cls_anonym.__module__,
                         cls_anonym.__name__,
+                        model.__module__,
                         model.__name__)
             )
         if specified_fields > model_fields:
             raise LookupError(
-                'Fields {} present in {} class, but does not exist in {} model'
+                '''Fields {} present in {}.{} class, but '''
+                '''does not exist in {}.{} model'''
                 .format(list(specified_fields - model_fields),
+                        cls_anonym.__module__,
                         cls_anonym.__name__,
+                        model.__module__,
                         model.__name__)
             )
         if specified_fields != model_fields:
             raise LookupError(
-                'Fields in {} are not the same as in {}. Check spelling'
-                .format(cls_anonym.__name__, model.__name__)
+                'Fields in {}.{} are not the same as in {}.{}. Check spelling'
+                .format(cls_anonym.__module__,
+                        cls_anonym.__name__,
+                        model.__module__,
+                        model.__name__)
             )
 
         Anonymizer.anonym_models[model.__module__ +
