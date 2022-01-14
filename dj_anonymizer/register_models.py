@@ -38,13 +38,9 @@ class AnonymBase:
         if hasattr(cls.Meta, 'queryset'):
             if cls.Meta.queryset.model not in [model, AnonymBase]:
                 raise TypeError(
-                    'Class {}.{} does not belong to the allowed ({}.{}, {}.{})'
-                    .format(cls.Meta.queryset.model.__module__,
-                            cls.Meta.queryset.model.__name__,
-                            model.__module__,
-                            model.__name__,
-                            AnonymBase.__module__,
-                            AnonymBase.__name__)
+                    f'Class {Anonymizer.key(cls.Meta.queryset.model)} does '
+                    f'not belong to the allowed ({Anonymizer.key(model)}, '
+                    f'{Anonymizer.key(AnonymBase)})'
                 )
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
@@ -80,45 +76,37 @@ def register_anonym(models):
 
         if exclude_fields & anonym_fields:
             raise LookupError(
-                '''Fields {} of model {}.{} are present in both '''
-                '''anonymization and excluded lists'''
-                .format(list(exclude_fields & anonym_fields),
-                        model.__module__,
-                        model.__name__)
+                f'Fields {list(exclude_fields & anonym_fields)} of model '
+                f'{Anonymizer.key(model)} are present in both anonymization '
+                f'and excluded lists'
             )
 
         specified_fields = exclude_fields | anonym_fields
 
         if specified_fields < model_fields:
             raise LookupError(
-                'Fields {} were not registered in {}.{} class for {}.{} model'
-                .format(list(model_fields - specified_fields),
-                        cls_anonym.__module__,
-                        cls_anonym.__name__,
-                        model.__module__,
-                        model.__name__)
+                f'Fields {list(model_fields - specified_fields)} were not '
+                f'registered in {Anonymizer.key(cls_anonym)} class for '
+                f'{Anonymizer.key(model)} model'
             )
         if specified_fields > model_fields:
             raise LookupError(
-                '''Fields {} present in {}.{} class, but '''
-                '''does not exist in {}.{} model'''
-                .format(list(specified_fields - model_fields),
-                        cls_anonym.__module__,
-                        cls_anonym.__name__,
-                        model.__module__,
-                        model.__name__)
+                f'Fields {list(specified_fields - model_fields)} present in '
+                f'{Anonymizer.key(cls_anonym)} class, but does not exist in '
+                f'{Anonymizer.key(model)} model'''
             )
         if specified_fields != model_fields:
             raise LookupError(
-                'Fields in {}.{} are not the same as in {}.{}. Check spelling'
-                .format(cls_anonym.__module__,
-                        cls_anonym.__name__,
-                        model.__module__,
-                        model.__name__)
+                f'Fields in {Anonymizer.key(cls_anonym)} are not '
+                f'the same as in {Anonymizer.key(model)} Check spelling'
             )
 
-        Anonymizer.anonym_models[model.__module__ +
-                                 '.' + model.__name__] = cls_anonym
+        if Anonymizer.key(model) in Anonymizer.anonym_models.keys():
+            raise ValueError(
+                f'Model {Anonymizer.key(model)} '
+                f'is already declared in register_anonym'
+            )
+        Anonymizer.anonym_models[Anonymizer.key(model)] = cls_anonym
 
 
 def register_clean(models):
@@ -126,20 +114,20 @@ def register_clean(models):
         cls_anonym.init_meta(model)
         queryset = cls_anonym.Meta.queryset
         queryset.truncate = cls_anonym.truncate
-        model_name = f'{model.__module__}.{model.__name__}'
-        if (model_name in Anonymizer.clean_models.keys()):
+        if Anonymizer.key(model) in Anonymizer.clean_models.keys():
             raise ValueError(
-                f'Model {model_name} is already declared in register_clean'
+                f'Model {Anonymizer.key(model)} '
+                f'is already declared in register_clean'
             )
-        Anonymizer.clean_models[model_name] = queryset
+        Anonymizer.clean_models[Anonymizer.key(model)] = queryset
         cls_anonym.clear_meta()
 
 
 def register_skip(models):
     for model in models:
-        model_name = f'{model.__module__}.{model.__name__}'
-        if (model_name in Anonymizer.skip_models):
+        if Anonymizer.key(model) in Anonymizer.skip_models:
             raise ValueError(
-                f'Model {model_name} is already declared in register_skip'
+                f'Model {Anonymizer.key(model)} '
+                f'is already declared in register_skip'
             )
-        Anonymizer.skip_models.append(model_name)
+        Anonymizer.skip_models.append(Anonymizer.key(model))
