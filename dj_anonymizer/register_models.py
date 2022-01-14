@@ -126,8 +126,12 @@ def register_clean(models):
         cls_anonym.init_meta(model)
         queryset = cls_anonym.Meta.queryset
         queryset.truncate = cls_anonym.truncate
-        Anonymizer.clean_models[model.__module__ +
-                                '.' + model.__name__] = queryset
+        model_name = f'{model.__module__}.{model.__name__}'
+        if (model_name in Anonymizer.clean_models.keys()):
+            raise ValueError(
+                f'Model {model_name} is already declared in register_clean'
+            )
+        Anonymizer.clean_models[model_name] = queryset
         cls_anonym.clear_meta()
 
 
