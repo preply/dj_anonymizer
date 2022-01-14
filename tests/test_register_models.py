@@ -1,5 +1,3 @@
-from unittest import mock
-
 import pytest
 from django.contrib.auth.models import Group, Permission, User
 from django.db.models.query import QuerySet
@@ -15,6 +13,10 @@ def test_register_clean(mocker):
         (Permission, register_models.AnonymBase(truncate=True)),
         (Group, register_models.AnonymBase())
     ])
+
+    assert len(Anonymizer.clean_models) == 3
+    assert len(Anonymizer.skip_models) == 0
+    assert len(Anonymizer.anonym_models) == 0
 
     assert 'django.contrib.auth.models.User' in \
         Anonymizer.clean_models.keys()
@@ -61,6 +63,11 @@ def test_register_clean_duplicate(mocker):
 @pytest.mark.django_db
 def test_register_skip(mocker):
     register_models.register_skip([User, Permission, Group])
+
+    assert len(Anonymizer.clean_models) == 0
+    assert len(Anonymizer.skip_models) == 3
+    assert len(Anonymizer.anonym_models) == 0
+
     assert 'django.contrib.auth.models.User' in Anonymizer.skip_models
     assert 'django.contrib.auth.models.Permission' in Anonymizer.skip_models
     assert 'django.contrib.auth.models.Group' in Anonymizer.skip_models
