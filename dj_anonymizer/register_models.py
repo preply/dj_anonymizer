@@ -137,4 +137,9 @@ def register_clean(models):
 
 def register_skip(models):
     for model in models:
-        Anonymizer.skip_models.append(model.__module__ + '.' + model.__name__)
+        model_name = f'{model.__module__}.{model.__name__}'
+        if (model_name in Anonymizer.skip_models):
+            raise ValueError(
+                f'Model {model_name} is already declared in register_skip'
+            )
+        Anonymizer.skip_models.append(model_name)

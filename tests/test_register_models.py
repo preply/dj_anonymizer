@@ -58,10 +58,15 @@ def test_register_clean_duplicate(mocker):
         ])
 
 
+@pytest.mark.django_db
 def test_register_skip(mocker):
-    skip_mock = mock.MagicMock()
-    mocker.patch('dj_anonymizer.anonymizer.Anonymizer.skip_models', skip_mock)
     register_models.register_skip([User, Permission, Group])
-    skip_mock.method_calls[0][1] == 'django.contrib.auth.models.User'
-    skip_mock.method_calls[1][1] == 'django.contrib.auth.models.Permission'
-    skip_mock.method_calls[2][1] == 'django.contrib.auth.models.Group'
+    assert 'django.contrib.auth.models.User' in Anonymizer.skip_models
+    assert 'django.contrib.auth.models.Permission' in Anonymizer.skip_models
+    assert 'django.contrib.auth.models.Group' in Anonymizer.skip_models
+
+
+@pytest.mark.django_db
+def test_register_skip_duplicate(mocker):
+    with pytest.raises(ValueError):
+        register_models.register_skip([User, Permission, Group, Group])
