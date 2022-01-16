@@ -1,9 +1,54 @@
-Usage
+Usage and tips
 =====
 
-You must specify all models and all their fields in dj_anonymizer. This helps you to avoid the situation when something has changed in your project models (e.g. some fields with sensitive data were added) and you forget to clean or fake them.
+It's recommended to specify all models and all their fields in dj_anonymizer. This helps to avoid the situation in the future when some changes were introduced to project models (e.g. some fields with sensitive data were added) and it was forgotten to clean or fake them.
 
-If you don't want to specify all models you can use anonymizer with :doc:`- - soft_mode<../run_anonymization>` argument.
+If there's no need to specify all models anonymizer may be used with :doc:`- - soft_mode<../run_anonymization>` argument.
+
+Usage pattern suggestion
+-------------
+
+For better structuring of dj_anonymizer, it may be used with a pattern described below.
+
+For example if project structure looks like below::
+
+    project/
+        manage.py
+        project/
+            ...
+        app1/
+            ...
+        app2/
+            ...
+        ...
+        appN/
+            ...
+        ...
+
+dj_anonymizer may be placed as a separate Django app. Model definitions may be defined within the same naming structure as it used for applications::
+
+    project/
+        manage.py
+        project/
+            ...
+        app1/
+            ...
+        app2/
+            ...
+        ...
+        appN/
+            ...
+        ...
+        anonymizer/
+            app1.py
+            app2.py
+            ...
+            appN.py
+
+Definition directory may be changed via :doc:`ANONYMIZER_MODEL_DEFINITION_DIR<../settings>`.
+
+dj_anonymizer by default also read `base.py` in the model's definition directory where may be placed `django.contrib.*.models` as well as models defined by any 3rd-party libraries.
+
 
 Model registration
 ------------------
