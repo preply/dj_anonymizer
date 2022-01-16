@@ -229,6 +229,24 @@ def test_register_clean_duplicate():
 
 
 @pytest.mark.django_db
+def test_register_clean_mixed_args():
+    with pytest.raises(TypeError):
+        register_models.register_clean([
+            (User, register_models.AnonymBase),
+            (register_models.AnonymBase, Permission)
+        ])
+
+
+@pytest.mark.django_db
+def test_register_clean_none():
+    with pytest.raises(TypeError):
+        register_models.register_clean([
+            (User, register_models.AnonymBase),
+            (Permission, None)
+        ])
+
+
+@pytest.mark.django_db
 def test_register_skip():
     register_models.register_skip([User, Permission, Group])
 
