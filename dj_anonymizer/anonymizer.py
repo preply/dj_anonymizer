@@ -18,7 +18,7 @@ class Anonymizer:
 
         for app in django.apps.apps.get_app_configs():
             models_set.update(
-                model.__module__ + '.' + model.__name__
+                Anonymizer.key(model)
                 for model in app.get_models()
             )
             import_if_exist(app.name)
@@ -33,6 +33,13 @@ class Anonymizer:
             raise LookupError(
                 'You did not set those models to any list: {}'.format(
                     list(models_set.difference(all_models))))
+
+    @staticmethod
+    def key(model):
+        """
+        Keys that used for referencing Django models in Anonymizer
+        """
+        return f'{model.__module__}.{model.__name__}'
 
     def anonymize(self):
         print('Updating started')
