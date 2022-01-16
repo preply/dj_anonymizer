@@ -36,22 +36,13 @@ class AnonymBase:
     @classmethod
     def init_meta(cls, model):
         if hasattr(cls.Meta, 'queryset'):
-            if cls.Meta.queryset.model not in [model, AnonymBase]:
+            if cls.Meta.queryset.model != model:
                 raise TypeError(
                     f'Class {Anonymizer.key(cls.Meta.queryset.model)} does '
-                    f'not belong to the allowed ({Anonymizer.key(model)}, '
-                    f'{Anonymizer.key(AnonymBase)})'
+                    f'not belong to the allowed {Anonymizer.key(AnonymBase)}'
                 )
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
-
-    @classmethod
-    def clear_meta(cls):
-        if hasattr(cls.Meta, 'queryset'):
-            delattr(cls.Meta, 'queryset')
-
-        if hasattr(cls.Meta, 'exclude_fields'):
-            delattr(cls.Meta, 'exclude_fields')
 
     class Meta:
         pass
@@ -111,8 +102,13 @@ def register_anonym(models):
 
 def register_clean(models):
     for model, cls_anonym in models:
-        cls_anonym.init_meta(model)
-        queryset = cls_anonym.Meta.queryset
+        if not (cls_anonym == AnonymBase
+                or isinstance(cls_anonym, AnonymBase)):
+            raise TypeError(
+                f'Class used for cleaning model {Anonymizer.key(model)} does '
+                f'not belong to the allowed {Anonymizer.key(AnonymBase)}'
+            )
+        queryset = model.objects.all()
         queryset.truncate = cls_anonym.truncate
         if Anonymizer.key(model) in Anonymizer.clean_models.keys():
             raise ValueError(
@@ -120,7 +116,6 @@ def register_clean(models):
                 f'is already declared in register_clean'
             )
         Anonymizer.clean_models[Anonymizer.key(model)] = queryset
-        cls_anonym.clear_meta()
 
 
 def register_skip(models):
