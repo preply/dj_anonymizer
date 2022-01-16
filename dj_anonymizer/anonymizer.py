@@ -12,8 +12,8 @@ class Anonymizer:
     def __init__(self, soft_mode=True):
         models_set = set()
 
-        # this for django contrib.auth.models or can be used
-        # as single file for defining all models to anonymize
+        # this for django.contrib.*.models or can be used
+        # as single file for defining models for anonymizing
         import_if_exist('base')
 
         for app in django.apps.apps.get_app_configs():
