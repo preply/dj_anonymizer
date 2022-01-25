@@ -1,6 +1,10 @@
 Changelog
 =============
 
+Unreleased
+----------
+* Improvement: moved to GitHub Actions (`#64 <https://github.com/preply/dj_anonymizer/pull/64>`__)
+
 0.4.0
 ----------
 * Feature: possibility to truncate register_clean tables (`#41 <https://github.com/preply/dj_anonymizer/pull/41>`__)
