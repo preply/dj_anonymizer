@@ -1,5 +1,6 @@
 import inspect
 
+from django.db import connection, ProgrammingError
 from django.db.models.fields import Field
 from django.db.models.fields.related import (
     ForeignKey,
@@ -50,6 +51,13 @@ class AnonymBase:
 
 def register_anonym(models):
     for model, cls_anonym in models:
+
+        if model._meta.db_table not in connection.introspection.table_names():
+            raise ProgrammingError(
+                f'Model {Anonymizer.key(model)} '
+                f'registered, but table does not exist'
+            )
+
         cls_anonym.init_meta(model)
 
         anonym_fields = set(cls_anonym.get_fields_names())
@@ -108,6 +116,13 @@ def register_clean(models):
                 f'Class used for cleaning model {Anonymizer.key(model)} does '
                 f'not belong to the allowed {Anonymizer.key(AnonymBase)}'
             )
+
+        if model._meta.db_table not in connection.introspection.table_names():
+            raise ProgrammingError(
+                f'Model {Anonymizer.key(model)} '
+                f'registered, but table does not exist'
+            )
+
         queryset = model.objects.all()
         queryset.truncate = cls_anonym.truncate
         if Anonymizer.key(model) in Anonymizer.clean_models.keys():
