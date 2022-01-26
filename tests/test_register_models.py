@@ -152,6 +152,7 @@ def test_register_anonym_no_exclude():
     ) is False
 
 
+@pytest.mark.django_db
 def test_register_anonym_duplicate():
     class UserAnonym(register_models.AnonymBase):
         email = fields.string('test_email_{seq}@preply.com',
