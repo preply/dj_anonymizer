@@ -42,7 +42,6 @@ class Anonymizer:
         return f'{model.__module__}.{model.__name__}'
 
     def anonymize(self):
-        print('Updating started')
         for anonym_cls in list(self.anonym_models.values()):
 
             if not anonym_cls.get_fields_names():
@@ -52,9 +51,7 @@ class Anonymizer:
                 *anonym_cls.get_fields_names()
             )
 
-            print('\nGenerating fake values for model "{}"'.format(
-                queryset.model.__name__
-            ))
+            print(f'Anonymizing model {self.key(queryset.model)}')
 
             i = 0
             total = queryset.count()
@@ -73,14 +70,11 @@ class Anonymizer:
                     anonym_cls.get_fields_names(),
                     batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                 )
-        print('\n\nUpdating finished')
 
     def clean(self):
-        print('\nCleaning started\n')
         for queryset in self.clean_models.values():
-            print('Cleaning "{}" ...'.format(queryset.model.__name__))
+            print(f'Cleaning {self.key(queryset.model)} ...')
             if getattr(queryset, 'truncate') is True:
                 truncate_table(queryset.model)
             else:
                 queryset.delete()
-        print('\nCleaning finished')
