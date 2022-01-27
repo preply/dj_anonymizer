@@ -6,6 +6,8 @@ from dj_anonymizer.anonymizer import Anonymizer
 
 
 class Command(BaseCommand):
+    help = "Anonymize database according to provided patterns."
+
     def add_arguments(self, parser):
         parser.add_argument('-a', '--action',
                             help='"anonymize" models or "clean" models '
@@ -18,15 +20,25 @@ class Command(BaseCommand):
                                  'correctly')
 
     def handle(self, *args, **options):
+        self.action = options['action']
+        self.soft_mode = options['soft_mode']
+        self.check_only = options['check_only']
         start = time.time()
-        anonymizer = Anonymizer(soft_mode=options['soft_mode'])
-        print('Check pass successfully')
-        if options['check_only'] is True:
+        anonymizer = Anonymizer(soft_mode=self.soft_mode)
+        self.stdout.write('Check pass successfully')
+        self.stdout.write(f'{"=-" * 25}=')
+        if self.check_only is True:
             return
-        if options['action'] is None or options['action'] == 'anonymize':
-            anonymizer.anonymize()
-        if options['action'] is None or options['action'] == 'clean':
-            anonymizer.clean()
-        end = time.time()
-        print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
-        print('Total time (sec.): {}'.format(end - start))
+        if self.action is None or self.action == 'anonymize':
+            if len(anonymizer.anonym_models) > 0:
+                self.stdout.write('Anonymizing started')
+                anonymizer.anonymize()
+                self.stdout.write('Anonymizing finished')
+        if self.action is None or self.action == 'clean':
+            if len(anonymizer.clean_models) > 0:
+                self.stdout.write('Cleaning started')
+                anonymizer.clean()
+                self.stdout.write('Cleaning finished')
+        end = time.time() - start
+        self.stdout.write(f'{"=-" * 25}=')
+        self.stdout.write(f'Total time (sec.): {end:.2f}')
