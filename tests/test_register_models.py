@@ -86,6 +86,36 @@ def test_register_anonym():
 
 
 @pytest.mark.django_db
+def test_register_anonym_only():
+    class UserAnonym(register_models.AnonymBase):
+        email = fields.string('test_email_{seq}@preply.com',
+                              seq_callback=datetime.datetime.now)
+        username = fields.string('test_username_{seq}@preply.com',
+                                 seq_callback=datetime.datetime.now)
+        first_name = fields.string('first name {seq}')
+        last_name = fields.string('last name {seq}')
+        password = fields.password('password')
+        is_staff = fields.function(lambda: False)
+
+        class Meta:
+            exclude_fields = ['is_active', 'is_superuser',
+                              'last_login', 'date_joined']
+
+    class GroupAnonym(register_models.AnonymBase):
+        name = fields.string("group_name_{seq}")
+
+    register_models.register_anonym([
+        (User, UserAnonym),
+        (Group, GroupAnonym),
+    ])
+
+    Anonymizer(only='django.contrib.auth.models.Group')
+
+    with pytest.raises(LookupError):
+        Anonymizer(only='django.contrib.auth.models.WrongGroup')
+
+
+@pytest.mark.django_db
 def test_register_anonym_no_exclude():
     class UserAnonym(register_models.AnonymBase):
         email = fields.string('test_email_{seq}@preply.com',
@@ -96,6 +126,9 @@ def test_register_anonym_no_exclude():
         last_name = fields.string('last name {seq}')
         password = fields.password('password')
         is_staff = fields.function(lambda: False)
+
+        class Meta:
+            pass
 
     register_models.register_anonym([
         (User, UserAnonym)
@@ -230,6 +263,19 @@ def test_register_clean_duplicate():
 
 
 @pytest.mark.django_db
+def test_register_clean_only():
+    register_models.register_clean([
+        (User, register_models.AnonymBase),
+        (Permission, register_models.AnonymBase(truncate=True)),
+        (Group, register_models.AnonymBase())
+    ])
+    Anonymizer(only='django.contrib.auth.models.Group')
+
+    with pytest.raises(LookupError):
+        Anonymizer(only='django.contrib.auth.models.WrongGroup')
+
+
+@pytest.mark.django_db
 def test_register_clean_mixed_args():
     with pytest.raises(TypeError):
         register_models.register_clean([
@@ -258,6 +304,16 @@ def test_register_skip():
     assert 'django.contrib.auth.models.User' in Anonymizer.skip_models
     assert 'django.contrib.auth.models.Permission' in Anonymizer.skip_models
     assert 'django.contrib.auth.models.Group' in Anonymizer.skip_models
+
+
+@pytest.mark.django_db
+def test_register_skip_only():
+    register_models.register_skip([User, Permission, Group])
+
+    Anonymizer(only='django.contrib.auth.models.Group')
+
+    with pytest.raises(LookupError):
+        Anonymizer(only='django.contrib.auth.models.WrongGroup')
 
 
 @pytest.mark.django_db
