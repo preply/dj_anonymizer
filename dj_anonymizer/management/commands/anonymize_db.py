@@ -39,7 +39,8 @@ class Command(BaseCommand):
         if self.action is None or self.action == 'anonymize':
             if (
                 (self.only is None)
-                or (self.only is not None and self.only in Anonymizer.anonym_model)
+                or (self.only is not None
+                    and self.only in Anonymizer.anonym_model)
             ) and len(anonymizer.anonym_models) > 0:
                 self.stdout.write('Anonymizing started')
                 anonymizer.anonymize(only=self.only)
@@ -47,7 +48,8 @@ class Command(BaseCommand):
         if self.action is None or self.action == 'clean':
             if (
                 (self.only is None)
-                or (self.only is not None and self.only in Anonymizer.clean_models)
+                or (self.only is not None
+                    and self.only in Anonymizer.clean_models)
             ) and len(anonymizer.anonym_models) > 0:
                 self.stdout.write('Cleaning started')
                 anonymizer.clean(only=self.only)
