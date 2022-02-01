@@ -45,9 +45,6 @@ class AnonymBase:
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
 
-    class Meta:
-        pass
-
 
 def register_anonym(models):
     for model, cls_anonym in models:

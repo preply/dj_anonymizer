@@ -15,6 +15,9 @@ class QuestionAnonym(AnonymBase):
     question_text = fields.string("John Doe {seq}")
     pub_date = fields.function(datetime.datetime.now)
 
+    class Meta:
+        pass
+
 
 register_anonym([
     (Question, QuestionAnonym),

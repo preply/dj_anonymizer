@@ -104,6 +104,9 @@ def test_register_anonym_only():
     class GroupAnonym(register_models.AnonymBase):
         name = fields.string("group_name_{seq}")
 
+        class Meta:
+            pass
+
     register_models.register_anonym([
         (User, UserAnonym),
         (Group, GroupAnonym),
