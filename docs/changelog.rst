@@ -3,7 +3,8 @@ Changelog
 
 Unreleased
 ----------
-* Feature: raise exception if model registered, but database table does not exist  (`#63 <https://github.com/preply/dj_anonymizer/pull/63>`__)
+* Feature: add possibility to execute anonymizer only on the specified model (`#69 <https://github.com/preply/dj_anonymizer/pull/69>`__)
+* Feature: raise exception if model registered, but database table does not exist (`#63 <https://github.com/preply/dj_anonymizer/pull/63>`__)
 * Improvement: moved to GitHub Actions (`#64 <https://github.com/preply/dj_anonymizer/pull/64>`__)
 
 0.4.0
