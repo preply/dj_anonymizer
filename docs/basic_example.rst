@@ -45,3 +45,7 @@ To anonymize your models go through the following steps:
     $ manage.py anonymize_db --soft_mode
 
 **Note** soft_mode here means that you no need to register all models before anonymization.
+
+There is also possibility to execute anonymization per model::
+
+    $ manage.py anonymize_db --only my_app.models.Author
