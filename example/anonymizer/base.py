@@ -11,6 +11,7 @@ from dj_anonymizer import fields
 from dj_anonymizer.register_models import (
     AnonymBase,
     register_anonym,
+    register_clean,
     register_skip
 )
 
@@ -30,14 +31,26 @@ class UserAnonym(AnonymBase):
                           'last_login', 'date_joined']
 
 
+class GroupAnonym(AnonymBase):
+    name = fields.string('group_{seq}')
+
+    class Meta:
+        pass
+
+
 register_anonym([
     (User, UserAnonym),
+    (Group, GroupAnonym),
+])
+
+
+register_clean([
+    (Session, AnonymBase),
+    (LogEntry, AnonymBase(truncate=True)),
 ])
 
 register_skip([
     ContentType,
-    Group,
     Permission,
-    LogEntry,
     Session,
 ])
