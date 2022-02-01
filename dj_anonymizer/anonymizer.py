@@ -82,7 +82,7 @@ class Anonymizer:
     def clean(self, only=None):
         clean_list = list(self.clean_models.values()) if only else list(only)
         for queryset in clean_list:
-            print(f'Cleaning {self.key(queryset.model)} ...')
+            print(f'Cleaning {self.key(queryset.model)}')
             if getattr(queryset, 'truncate') is True:
                 truncate_table(queryset.model)
             else:
