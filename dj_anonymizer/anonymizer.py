@@ -49,7 +49,8 @@ class Anonymizer:
         return f'{model.__module__}.{model.__name__}'
 
     def anonymize(self, only=None):
-        anon_list = self.anonym_models.values() if only is None else list(only)
+        anon_list = self.anonym_models.values() if only is None \
+            else [self.anonym_models[only]]
         for anonym_cls in anon_list:
 
             if not anonym_cls.get_fields_names():
@@ -80,7 +81,8 @@ class Anonymizer:
                 )
 
     def clean(self, only=None):
-        clean_list = self.clean_models.values() if only is None else list(only)
+        clean_list = self.clean_models.values() if only is None \
+            else [self.clean_models[only]]
         for queryset in clean_list:
             print(f'Cleaning {self.key(queryset.model)}')
             if getattr(queryset, 'truncate') is True:
