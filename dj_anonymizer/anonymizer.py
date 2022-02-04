@@ -9,7 +9,7 @@ class Anonymizer:
     clean_models = {}
     skip_models = []
 
-    def __init__(self, soft_mode=True):
+    def __init__(self, soft_mode=True, only=None):
         models_set = set()
 
         # this for django.contrib.*.models or can be used
@@ -29,10 +29,17 @@ class Anonymizer:
             list(self.clean_models.keys())
         )
 
+        if only is not None and only not in all_models:
+            raise LookupError(
+                f'Model specified at --only attibute({only}) can\'t '
+                f'be found at list of registered models'
+            )
+
         if not soft_mode and not models_set.issubset(all_models):
             raise LookupError(
-                'You did not set those models to any list: {}'.format(
-                    list(models_set.difference(all_models))))
+                f'You did not set those models to any list: '
+                f'{list(models_set.difference(all_models))}'
+            )
 
     @staticmethod
     def key(model):
@@ -41,8 +48,10 @@ class Anonymizer:
         """
         return f'{model.__module__}.{model.__name__}'
 
-    def anonymize(self):
-        for anonym_cls in list(self.anonym_models.values()):
+    def anonymize(self, only=None):
+        anon_list = self.anonym_models.values() if only is None \
+            else [self.anonym_models[only]]
+        for anonym_cls in anon_list:
 
             if not anonym_cls.get_fields_names():
                 continue
@@ -71,9 +80,11 @@ class Anonymizer:
                     batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
                 )
 
-    def clean(self):
-        for queryset in self.clean_models.values():
-            print(f'Cleaning {self.key(queryset.model)} ...')
+    def clean(self, only=None):
+        clean_list = self.clean_models.values() if only is None \
+            else [self.clean_models[only]]
+        for queryset in clean_list:
+            print(f'Cleaning {self.key(queryset.model)}')
             if getattr(queryset, 'truncate') is True:
                 truncate_table(queryset.model)
             else:

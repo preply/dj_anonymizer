@@ -1,6 +1,6 @@
 import inspect
 
-from django.db import connection, ProgrammingError
+from django.db import ProgrammingError, connection
 from django.db.models.fields import Field
 from django.db.models.fields.related import (
     ForeignKey,
@@ -44,9 +44,6 @@ class AnonymBase:
                 )
         else:
             setattr(cls.Meta, 'queryset', model.objects.all())
-
-    class Meta:
-        pass
 
 
 def register_anonym(models):
