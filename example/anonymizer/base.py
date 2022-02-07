@@ -29,6 +29,9 @@ class UserAnonym(AnonymBase):
     class Meta:
         exclude_fields = ['is_active', 'is_superuser',
                           'last_login', 'date_joined']
+        bypass_fields = {
+            "first_name": [None, ""]
+        }
 
 
 class GroupAnonym(AnonymBase):

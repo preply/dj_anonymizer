@@ -71,9 +71,15 @@ class Anonymizer:
                     i += 1
 
                     for name in anonym_cls.get_fields_names():
-                        setattr(obj, name, next(
-                            getattr(anonym_cls, name))
-                        )
+                        if (
+                            name in anonym_cls.Meta.bypass_fields
+                            and obj.name in anonym_cls.Meta.bypass_fields[
+                                name
+                            ]
+                        ):
+                            pass
+                        else:
+                            setattr(obj, name, next(getattr(anonym_cls, name)))
                 subset.model.objects.bulk_update(
                     subset,
                     anonym_cls.get_fields_names(),
