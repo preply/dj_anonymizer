@@ -74,7 +74,7 @@ class Anonymizer:
                         setattr(obj, name, next(
                             getattr(anonym_cls, name))
                         )
-                subset.model.objects.bulk_update(
+                queryset.bulk_update(
                     subset,
                     anonym_cls.get_fields_names(),
                     batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
