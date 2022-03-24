@@ -1,6 +1,10 @@
 Changelog
 =============
 
+UNRELEASED
+----------
+* Bugfix: fix issue when model manager is overridden (`#71 <https://github.com/preply/dj_anonymizer/pull/71>`__)
+
 0.5.0
 ----------
 * Feature: add possibility to execute anonymizer only on the specified model (`#69 <https://github.com/preply/dj_anonymizer/pull/69>`__)
