@@ -247,7 +247,9 @@ def test_register_clean():
         QuerySet
     )
     assert isinstance(
-        Anonymizer.clean_models['django.contrib.contenttypes.models.ContentType'],
+        Anonymizer.clean_models[
+            'django.contrib.contenttypes.models.ContentType'
+        ],
         QuerySet
     )
 
