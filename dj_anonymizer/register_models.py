@@ -13,9 +13,11 @@ from dj_anonymizer.anonymizer import Anonymizer
 
 class AnonymBase:
     truncate = False
+    cascade = False
 
-    def __init__(self, truncate=False):
+    def __init__(self, truncate=False, cascade=False):
         self.truncate = truncate
+        self.cascade = cascade
 
     @classmethod
     def get_fields_names(cls):
@@ -122,6 +124,7 @@ def register_clean(models):
 
         queryset = model.objects.all()
         queryset.truncate = cls_anonym.truncate
+        queryset.cascade = cls_anonym.cascade
         if Anonymizer.key(model) in Anonymizer.clean_models.keys():
             raise ValueError(
                 f'Model {Anonymizer.key(model)} '

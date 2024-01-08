@@ -46,10 +46,11 @@ def test_truncate_table_with_cascade(mock_connections):
     mock_connections.__getitem__(DEFAULT_DB_ALIAS).vendor = 'postgresql'
 
     truncate_table(User, True)
-    mock_cursor.execute.assert_called_once_with('TRUNCATE TABLE "auth_user" CASCADE')
+    mock_cursor.execute.assert_called_once_with(
+        'TRUNCATE TABLE "auth_user" CASCADE'
+    )
 
     mock_connections.__getitem__(DEFAULT_DB_ALIAS).vendor = 'sqlite'
 
     with pytest.raises(NotImplementedError):
         truncate_table(User, True)
-

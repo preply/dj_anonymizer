@@ -53,7 +53,7 @@ def truncate_table(model, cascade=False):
             cascade_op = VENDOR_TO_CASCADE[vendor]
     except KeyError:
         raise NotImplementedError(
-            "Database vendor %s does not support TRUNCATE with CASCADE" % vendor
+            "DB vendor %s does not support TRUNCATE with CASCADE" % vendor
         )
 
     dbtable = '"{}"'.format(model._meta.db_table)

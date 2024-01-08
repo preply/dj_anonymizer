@@ -1,6 +1,10 @@
 Changelog
 =============
 
+0.6.0
+----------
+* Feature: adds possibility to truncate with cascade option (`#73 <https://github.com/preply/dj_anonymizer/pull/73>`__)
+
 0.5.1
 ----------
 * Bugfix: fix issue when model manager is overridden (`#71 <https://github.com/preply/dj_anonymizer/pull/71>`__)

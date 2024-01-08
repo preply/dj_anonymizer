@@ -3,6 +3,7 @@ import types
 
 import pytest
 from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 
 from dj_anonymizer import fields, register_models
@@ -216,10 +217,11 @@ def test_register_clean():
     register_models.register_clean([
         (User, register_models.AnonymBase),
         (Permission, register_models.AnonymBase(truncate=True)),
-        (Group, register_models.AnonymBase())
+        (Group, register_models.AnonymBase()),
+        (ContentType, register_models.AnonymBase(truncate=True, cascade=True)),
     ])
 
-    assert len(Anonymizer.clean_models) == 3
+    assert len(Anonymizer.clean_models) == 4
     assert len(Anonymizer.skip_models) == 0
     assert len(Anonymizer.anonym_models) == 0
 
@@ -228,6 +230,8 @@ def test_register_clean():
     assert 'django.contrib.auth.models.Permission' in \
         Anonymizer.clean_models.keys()
     assert 'django.contrib.auth.models.Group' in \
+        Anonymizer.clean_models.keys()
+    assert 'django.contrib.contenttypes.models.ContentType' in \
         Anonymizer.clean_models.keys()
 
     assert isinstance(
@@ -242,6 +246,10 @@ def test_register_clean():
         Anonymizer.clean_models['django.contrib.auth.models.Group'],
         QuerySet
     )
+    assert isinstance(
+        Anonymizer.clean_models['django.contrib.contenttypes.models.ContentType'],
+        QuerySet
+    )
 
     assert Anonymizer.clean_models[
         "django.contrib.auth.models.User"
@@ -250,8 +258,23 @@ def test_register_clean():
         "django.contrib.auth.models.Permission"
     ].model is Permission
     assert Anonymizer.clean_models[
+        "django.contrib.auth.models.Permission"
+    ].truncate is True
+    assert Anonymizer.clean_models[
+        "django.contrib.auth.models.Permission"
+    ].cascade is False
+    assert Anonymizer.clean_models[
         "django.contrib.auth.models.Group"
     ].model is Group
+    assert Anonymizer.clean_models[
+        "django.contrib.contenttypes.models.ContentType"
+    ].model is ContentType
+    assert Anonymizer.clean_models[
+        "django.contrib.contenttypes.models.ContentType"
+    ].truncate is True
+    assert Anonymizer.clean_models[
+        "django.contrib.contenttypes.models.ContentType"
+    ].cascade is True
 
 
 @pytest.mark.django_db

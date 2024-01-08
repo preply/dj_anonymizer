@@ -65,7 +65,7 @@ Model registration
 
    * `models` - list of tuples `(model, cls_anonym)`, where `model` is a model class and `cls_anonym` - anonymization class, inherited form `AnonymBase` with specified queryset for deletion or just `AnonymBase`.
 
-   If `AnonymBase` class have `truncate=True`, parameter table will be truncated instead of performing an SQL delete query.
+   If `AnonymBase` class have `truncate=True`, parameter table will be truncated instead of performing an SQL delete query. Additionally, `cascade=True` may be set to truncate foreign-key related tables (supported for postgresql and oracle).
 
 .. function:: register_skip(models)
 
@@ -186,7 +186,19 @@ Example 2 - truncate all data from model `User`::
         (User, AnonymBase(truncate=True)),
     ])
 
-Example 3 - delete all data from model `User`, except user with id=1::
+Example 3 - truncate all data from model `User` with cascade option::
+
+    from django.contrib.auth.models import User
+
+    from dj_anonymizer.register_models import AnonymBase
+    from dj_anonymizer.register_models import register_clean
+
+
+    register_clean([
+        (User, AnonymBase(truncate=True, cascade=True)),
+    ])
+
+Example 4 - delete all data from model `User`, except user with id=1::
 
     from django.contrib.auth.models import User
 
