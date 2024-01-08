@@ -13,6 +13,11 @@ VENDOR_TO_TRUNCATE = {
     'oracle': 'TRUNCATE TABLE',
 }
 
+VENDOR_TO_CASCADE = {
+    'postgresql': 'CASCADE',
+    'oracle': 'CASCADE',
+}
+
 
 def import_if_exist(filename):
     """
@@ -27,7 +32,7 @@ def import_if_exist(filename):
         spec.loader.exec_module(mod)
 
 
-def truncate_table(model):
+def truncate_table(model, cascade=False):
     """
     Generate and execute via Django ORM proper SQL to truncate table
     """
@@ -42,11 +47,21 @@ def truncate_table(model):
             "Database vendor %s is not supported" % vendor
         )
 
+    cascade_op = ''
+    try:
+        if cascade:
+            cascade_op = VENDOR_TO_CASCADE[vendor]
+    except KeyError:
+        raise NotImplementedError(
+            "Database vendor %s does not support TRUNCATE with CASCADE" % vendor
+        )
+
     dbtable = '"{}"'.format(model._meta.db_table)
 
-    sql = '{operation} {dbtable}'.format(
+    sql = '{operation} {dbtable} {cascade}'.format(
         operation=operation,
         dbtable=dbtable,
-    )
+        cascade=cascade_op,
+    ).strip()
     with connection.cursor() as c:
         c.execute(sql)
