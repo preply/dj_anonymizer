@@ -3,7 +3,7 @@ dj_anonymizer [![Build Status](https://github.com/preply/dj_anonymizer/actions/w
 
 dj_anonymizer helps anonymize production database with any kind of fake data.
 
-Project works with Django 2.2 or higher and Python 3.5 or higher.
+Project works with Django 3.2 or higher and Python 3.8 or higher.
 
 Documentation
 ==================================
