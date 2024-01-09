@@ -54,7 +54,7 @@ jobs:
         run: |
           tox -v
       - name: Upload coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           name: Python ${{ matrix.python-version }}
           fail_ci_if_error: true
