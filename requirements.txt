@@ -1,7 +1,7 @@
 Django>=2.2,<=2.3
 django-appconf
 flake8==4.0.1
-isort==5.10.1
+isort==5.13.2
 pytest==6.2.5
 pytest-django==4.5.2
 pytest-cov==3.0.0
