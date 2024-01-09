@@ -59,7 +59,6 @@ class Anonymizer:
             queryset = anonym_cls.Meta.queryset.only(
                 *anonym_cls.get_fields_names()
             )
-
             print(f'Anonymizing model {self.key(queryset.model)}')
 
             i = 0

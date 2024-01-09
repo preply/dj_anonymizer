@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'dj_anonymizer'
-copyright = '2022, Preply'
+copyright = '2024, Preply'
 author = 'Preply'
 
 # The short X.Y version
