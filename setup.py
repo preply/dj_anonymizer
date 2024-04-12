@@ -13,7 +13,7 @@ setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
     include_package_data=True,
-    version='0.6.0',
+    version='0.6.1',
     description='This project helps anonymize production database '
                 + 'with fake data of any kind.',
     long_description=(read('README.md')),
@@ -44,5 +44,6 @@ setup(
     ],
     install_requires=[
         'Django>=3.2',
+        'django-appconf',
     ]
 )

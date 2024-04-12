@@ -1,6 +1,10 @@
 Changelog
 =============
 
+0.6.1
+----------
+* Bugfix: add missing dependency `django-appconf` (`#77 <https://github.com/preply/dj_anonymizer/pull/77>`__)
+
 0.6.0
 ----------
 * Feature: adds possibility to truncate with cascade option (`#73 <https://github.com/preply/dj_anonymizer/pull/73>`__)
