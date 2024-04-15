@@ -16,12 +16,6 @@ jobs:
       matrix:
         include:
           - python-version: '3.8'
-            tox-env: py38-django32
-          - python-version: '3.9'
-            tox-env: py39-django32
-          - python-version: '3.10'
-            tox-env: py310-django32
-          - python-version: '3.8'
             tox-env: py38-django42
           - python-version: '3.9'
             tox-env: py39-django42
@@ -42,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -56,9 +50,10 @@ jobs:
         run: |
           tox -v
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
-          name: Python ${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          name: Python-${{ matrix.python-version }}
           fail_ci_if_error: true
 
   lint:
@@ -78,7 +73,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
