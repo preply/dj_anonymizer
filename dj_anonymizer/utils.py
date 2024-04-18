@@ -1,9 +1,8 @@
 import importlib
 import os
 
+from django.conf import settings
 from django.db import connections, router
-
-from dj_anonymizer.conf import settings
 
 
 VENDOR_TO_TRUNCATE = {
@@ -23,7 +22,12 @@ def import_if_exist(filename):
     """
     Check if file exist in appropriate path and import it
     """
-    filepath = os.path.join(settings.ANONYMIZER_MODEL_DEFINITION_DIR, filename)
+    model_devinition_dir = getattr(
+        settings,
+        'ANONYMIZER_MODEL_DEFINITION_DIR',
+        'anonymizer'
+    )
+    filepath = os.path.join(model_devinition_dir, filename)
     full_filepath = os.path.abspath(filepath + '.py')
 
     if os.path.isfile(full_filepath):
