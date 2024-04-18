@@ -67,7 +67,7 @@ jobs:
 
       - name: Run tests
         env:
-          TOXENV: ${{ matrix.tox-env }}
+          TOXENV: codecov
         run: |
           tox -v
       - name: Upload coverage
