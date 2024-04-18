@@ -16,7 +16,7 @@ setup(
     version='0.6.1-dev',
     description='dj_anonymizer is a utility designed to anonymize '
                 + 'production databases with various types of mock data, '
-                + 'specifically designed for use within Django projects.'
+                + 'specifically designed for use within Django projects.',
     long_description=(read('README.md')),
     long_description_content_type='text/markdown',
     license='MIT',
