@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import datetime
+from django.utils import timezone
 
 from dj_anonymizer import fields
 from dj_anonymizer.register_models import (
@@ -13,7 +13,7 @@ from polls.models import Choice, Question
 
 class QuestionAnonym(AnonymBase):
     question_text = fields.string("John Doe {seq}")
-    pub_date = fields.function(datetime.datetime.now)
+    pub_date = fields.function(timezone.now)
 
     class Meta:
         pass
