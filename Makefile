@@ -4,10 +4,10 @@ help: ## Show help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 isort: ## run isort and change imports order
-	isort -rc dj_anonymizer example tests
+	isort dj_anonymizer example tests
 
 isort_check_only: ## run isort and show diff
-	isort -rc -c dj_anonymizer example tests
+	isort -c dj_anonymizer example tests
 
 flake8: ## run flake8
 	flake8 .
