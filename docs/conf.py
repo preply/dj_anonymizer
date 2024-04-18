@@ -26,7 +26,7 @@ author = 'Preply'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.6.1-dev'
+release = '0.6.1'
 
 
 # -- General configuration ---------------------------------------------------
