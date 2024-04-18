@@ -13,9 +13,10 @@ setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
     include_package_data=True,
-    version='0.6.0',
-    description='This project helps anonymize production database '
-                + 'with fake data of any kind.',
+    version='0.6.1-dev',
+    description='dj_anonymizer is a utility designed to anonymize '
+                + 'production databases with various types of mock data, '
+                + 'specifically designed for use within Django projects.',
     long_description=(read('README.md')),
     long_description_content_type='text/markdown',
     license='MIT',

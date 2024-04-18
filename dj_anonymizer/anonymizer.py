@@ -1,6 +1,6 @@
 import django
+from django.conf import settings
 
-from dj_anonymizer.conf import settings
 from dj_anonymizer.utils import import_if_exist, truncate_table
 
 
@@ -51,6 +51,14 @@ class Anonymizer:
     def anonymize(self, only=None):
         anon_list = self.anonym_models.values() if only is None \
             else [self.anonym_models[only]]
+        # Size of chunks what will be used to select data from table.
+        select_batch_size = getattr(
+            settings, "ANONYMIZER_SELECT_BATCH_SIZE", 20000
+        )
+        # Size of chunks what will be used to update data in table.
+        update_batch_size = getattr(
+            settings, "ANONYMIZER_UPDATE_BATCH_SIZE", 500
+        )
         for anonym_cls in anon_list:
 
             if not anonym_cls.get_fields_names():
@@ -64,7 +72,7 @@ class Anonymizer:
             i = 0
             total = queryset.count()
             for j in list(range(0, total,
-                          settings.ANONYMIZER_SELECT_BATCH_SIZE)) + [None]:
+                                select_batch_size)) + [None]:
                 subset = queryset.order_by('pk')[i:j]
                 for obj in subset:
                     i += 1
@@ -76,7 +84,7 @@ class Anonymizer:
                 queryset.bulk_update(
                     subset,
                     anonym_cls.get_fields_names(),
-                    batch_size=settings.ANONYMIZER_UPDATE_BATCH_SIZE,
+                    batch_size=update_batch_size,
                 )
 
     def clean(self, only=None):

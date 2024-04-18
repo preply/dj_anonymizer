@@ -1,5 +1,4 @@
 Django>=4.2,<=4.3
-django-appconf
 flake8==7.0.0
 isort==5.13.2
 pytest==8.1.1
