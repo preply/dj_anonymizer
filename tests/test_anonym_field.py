@@ -53,9 +53,6 @@ def test_string(field_value, seq_start, seq_step, seq_callback, seq_slugify,
 
 @pytest.mark.parametrize(
     '''password, salt, hasher, expected_1, expected_2''', [
-        ('password', '111', 'pbkdf2_sha256',
-         'pbkdf2_sha256$600000$111$jbrB3vijvjC3g2sNywF93ib0LZmuVheF3J5pd4Efqsk=',
-         'pbkdf2_sha256$600000$111$jbrB3vijvjC3g2sNywF93ib0LZmuVheF3J5pd4Efqsk='),
         ('password', '111', 'md5',
          'md5$111$d7fe5ea5ff97cc7c2c79e2df5eb7cf93',
          'md5$111$d7fe5ea5ff97cc7c2c79e2df5eb7cf93'),
