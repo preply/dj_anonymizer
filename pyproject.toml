@@ -1,0 +1,37 @@
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    envlist =
+        py{38,39,310,311,312}-django42
+        py{310,311,312}-django50
+        flake8
+        isort
+
+    [testenv]
+    deps =
+        django42: Django>=4.2,<4.3
+        django50: Django>=5.0,<5.1
+        django-appconf
+        pytest==8.1.1
+        pytest-django==4.8.0
+        pytest-mock==3.14.0
+        pytest-cov==5.0.0
+    allowlist_externals =
+        make
+    setenv =
+        PYTHONPATH = {toxinidir}
+    passenv =
+        CI
+        COVERAGE_ARGS
+        GITHUB_*
+    commands =
+        make coverage
+
+    [testenv:flake8]
+    commands = make flake8
+    deps = flake8==7.0.0
+
+    [testenv:isort]
+    commands = make isort
+    deps = isort==5.13.2
+"""
