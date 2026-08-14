@@ -20,11 +20,23 @@ class AnonymBase:
         self.cascade = cascade
 
     @classmethod
-    def get_fields_names(cls):
+    def get_generator_fields_names(cls):
         return [
             attr_name for attr_name in dir(cls)
             if inspect.isgenerator(getattr(cls, attr_name))
         ]
+
+    @classmethod
+    def get_update_fields_names(cls):
+        return list(getattr(cls.Meta, 'update_values', {}).keys())
+
+    @classmethod
+    def get_fields_names(cls):
+        return cls.get_generator_fields_names() + cls.get_update_fields_names()
+
+    @classmethod
+    def get_pre_update_phases(cls, queryset):
+        return []
 
     @classmethod
     def get_relation_fields(cls, model):
@@ -58,6 +70,15 @@ def register_anonym(models):
             )
 
         cls_anonym.init_meta(model)
+
+        generator_fields = set(cls_anonym.get_generator_fields_names())
+        update_fields = set(cls_anonym.get_update_fields_names())
+        if generator_fields & update_fields:
+            raise LookupError(
+                f'Fields {list(generator_fields & update_fields)} of model '
+                f'{Anonymizer.key(model)} are configured as both generator '
+                f'and database updates'
+            )
 
         anonym_fields = set(cls_anonym.get_fields_names())
         model_fields = set(

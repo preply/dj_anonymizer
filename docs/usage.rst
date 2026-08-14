@@ -129,6 +129,33 @@ In `class Meta` you can specify `queryset` and `exclude_fields`:
  * `queryset` - model queryset to which anonymization will be applied. If you don't specify this attribute, anonymization will be applied to all rows of model (like `MyModel.objects.all()`)
  * `exclude_fields` - list of model fields which should not be anonymized. If you don't specify this attribute, the excluded fields will be inferred automatically
 
+Database-expression updates
+---------------------------
+
+For large tables, fields can be anonymized without loading model instances by
+placing values accepted by Django's ``QuerySet.update()`` in
+``Meta.update_values``::
+
+    from django.db.models import CharField, F, Value
+    from django.db.models.functions import Cast, Concat
+
+
+    class UserAnonym(AnonymBase):
+        class Meta:
+            update_values = {
+                "email": Concat(
+                    Value("test_email_"),
+                    Cast(F("pk"), output_field=CharField()),
+                    Value("@preply.com"),
+                ),
+            }
+
+Database-expression fields and generator fields may be used in the same
+anonymization class, but the same field cannot be configured in both places.
+Override ``get_pre_update_phases(queryset)`` to return ordered update mappings
+that must run before the final values, for example when changing a uniquely
+constrained field in two phases.
+
 dj_anonymizer provides certain helpful field types for anonymization classes:
 
 .. function:: fields.function(callback, *args, **kwargs)

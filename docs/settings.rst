@@ -30,3 +30,12 @@ Default folder with model definitions.
 
 default value is 'anonymizer'.
 
+``ANONYMIZER_DATABASE_UPDATE_BATCH_SIZE``
+--------------------------------------------------
+
+**Optional**
+
+Chunk size used for database-expression updates configured through
+``Meta.update_values``.
+
+default value is 50000.

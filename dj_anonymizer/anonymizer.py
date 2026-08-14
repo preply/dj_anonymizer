@@ -59,33 +59,95 @@ class Anonymizer:
         update_batch_size = getattr(
             settings, "ANONYMIZER_UPDATE_BATCH_SIZE", 500
         )
+        database_update_batch_size = getattr(
+            settings, "ANONYMIZER_DATABASE_UPDATE_BATCH_SIZE", 50000
+        )
         for anonym_cls in anon_list:
 
             if not anonym_cls.get_fields_names():
                 continue
 
-            queryset = anonym_cls.Meta.queryset.only(
-                *anonym_cls.get_fields_names()
-            )
+            queryset = anonym_cls.Meta.queryset
             print(f'Anonymizing model {self.key(queryset.model)}')
 
-            i = 0
-            total = queryset.count()
-            for j in list(range(0, total,
-                                select_batch_size)) + [None]:
-                subset = queryset.order_by('pk')[i:j]
-                for obj in subset:
-                    i += 1
-
-                    for name in anonym_cls.get_fields_names():
-                        setattr(obj, name, next(
-                            getattr(anonym_cls, name))
-                        )
-                queryset.bulk_update(
-                    subset,
-                    anonym_cls.get_fields_names(),
-                    batch_size=update_batch_size,
+            update_values = getattr(anonym_cls.Meta, 'update_values', {})
+            pre_update_phases = anonym_cls.get_pre_update_phases(queryset)
+            for phase in pre_update_phases:
+                unknown_fields = set(phase) - set(update_values)
+                if unknown_fields:
+                    raise LookupError(
+                        f'Fields {list(unknown_fields)} in pre-update phase '
+                        f'are not present in Meta.update_values'
+                    )
+                self._update_queryset(
+                    queryset, phase, database_update_batch_size
                 )
+
+            self._update_queryset(
+                queryset, update_values, database_update_batch_size
+            )
+
+            generator_fields = anonym_cls.get_generator_fields_names()
+            if generator_fields:
+                self._anonymize_with_generators(
+                    queryset.only(*generator_fields),
+                    anonym_cls,
+                    generator_fields,
+                    select_batch_size,
+                    update_batch_size,
+                )
+
+    @staticmethod
+    def _update_queryset(queryset, update_values, batch_size):
+        if not update_values:
+            return
+        if batch_size < 1:
+            raise ValueError(
+                'ANONYMIZER_DATABASE_UPDATE_BATCH_SIZE must be greater than 0'
+            )
+
+        last_pk = None
+        while True:
+            remaining = queryset
+            if last_pk is not None:
+                remaining = remaining.filter(pk__gt=last_pk)
+
+            boundary = list(
+                remaining.order_by('pk').values_list('pk', flat=True)[
+                    batch_size - 1:batch_size
+                ]
+            )
+            if boundary:
+                last_pk = boundary[0]
+                batch = remaining.filter(pk__lte=last_pk)
+            else:
+                batch = remaining
+
+            batch.update(**update_values)
+            if not boundary:
+                break
+
+    @staticmethod
+    def _anonymize_with_generators(
+        queryset,
+        anonym_cls,
+        fields_names,
+        select_batch_size,
+        update_batch_size,
+    ):
+        i = 0
+        total = queryset.count()
+        for j in list(range(0, total, select_batch_size)) + [None]:
+            subset = queryset.order_by('pk')[i:j]
+            for obj in subset:
+                i += 1
+                for name in fields_names:
+                    setattr(obj, name, next(getattr(anonym_cls, name)))
+            queryset.bulk_update(
+                subset,
+                fields_names,
+                batch_size=update_batch_size,
+            )
 
     def clean(self, only=None):
         clean_list = self.clean_models.values() if only is None \
