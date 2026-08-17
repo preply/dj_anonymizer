@@ -1,6 +1,10 @@
 Changelog
 =============
 
+0.7.0
+----------
+* Feature: add batched database-expression updates for set-based anonymization.
+
 0.6.1
 ----------
 * Improvement: remove django-appconf implicit dependency (`#84 <https://github.com/preply/dj_anonymizer/pull/84>`__)
