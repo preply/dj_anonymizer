@@ -5,6 +5,7 @@ import pytest
 from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
+from django.test.utils import override_settings
 
 from dj_anonymizer import fields, register_models
 from dj_anonymizer.anonymizer import Anonymizer
@@ -187,6 +188,25 @@ def test_register_anonym_no_exclude():
     assert next(
         Anonymizer.anonym_models['django.contrib.auth.models.User'].is_staff
     ) is False
+
+
+@pytest.mark.django_db
+def test_anonymizer_construction_is_idempotent(tmp_path):
+    # Regression test for the worker_flaky failure: constructing Anonymizer a
+    # second time in the same process re-imported the definition files and
+    # re-ran their module-level register_* calls, raising "already declared".
+    # A definition file must be loaded once, so repeated construction is safe.
+    (tmp_path / 'base.py').write_text(
+        'from django.contrib.auth.models import Group\n'
+        'from dj_anonymizer import register_models\n'
+        'register_models.register_skip([Group])\n'
+    )
+
+    with override_settings(ANONYMIZER_MODEL_DEFINITION_DIR=str(tmp_path)):
+        Anonymizer()
+        Anonymizer()
+
+    assert Anonymizer.skip_models == ['django.contrib.auth.models.Group']
 
 
 @pytest.mark.django_db
