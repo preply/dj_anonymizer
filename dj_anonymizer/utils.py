@@ -17,10 +17,21 @@ VENDOR_TO_CASCADE = {
     'oracle': 'CASCADE',
 }
 
+# Absolute paths of definition files already imported in this process. These
+# files call register_* at import time, which raises on a duplicate, so each
+# one must be imported only once even though Anonymizer imports them on every
+# construction.
+_imported_files = set()
+
+
+def reset_import_cache():
+    """Forget imported definition files. For tests that reset the registry."""
+    _imported_files.clear()
+
 
 def import_if_exist(filename):
     """
-    Check if file exist in appropriate path and import it
+    Import the definition file if it exists, at most once per process.
     """
     model_devinition_dir = getattr(
         settings,
@@ -30,10 +41,11 @@ def import_if_exist(filename):
     filepath = os.path.join(model_devinition_dir, filename)
     full_filepath = os.path.abspath(filepath + '.py')
 
-    if os.path.isfile(full_filepath):
+    if full_filepath not in _imported_files and os.path.isfile(full_filepath):
         spec = importlib.util.spec_from_file_location(filename, full_filepath)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
+        _imported_files.add(full_filepath)
 
 
 def truncate_table(model, cascade=False):

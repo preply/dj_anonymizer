@@ -1,6 +1,10 @@
 Changelog
 =============
 
+0.7.1
+----------
+* Bugfix: import each anonymizer definition file only once per process, so constructing ``Anonymizer`` more than once no longer re-runs ``register_*`` and raises "already declared" (`#98 <https://github.com/preply/dj_anonymizer/pull/98>`__)
+
 0.7.0
 ----------
 * Feature: add batched database-expression updates for set-based anonymization.

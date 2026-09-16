@@ -22,6 +22,19 @@ def test_import_if_exist(mocker, path, expected):
         assert mocked_import.called is expected
 
 
+def test_import_if_exist_loads_file_only_once(mocker):
+    # Anonymizer imports definition files on every construction, and those
+    # files call register_* (which raises on a duplicate), so a file must be
+    # loaded only once per process.
+    with override_settings(
+        ANONYMIZER_MODEL_DEFINITION_DIR='example/anonymizer'
+    ):
+        mocked_import = mocker.patch('importlib.util.spec_from_file_location')
+        import_if_exist('base')
+        import_if_exist('base')
+        assert mocked_import.call_count == 1
+
+
 @mock.patch('dj_anonymizer.utils.connections')
 def test_truncate_table(mock_connections):
     mock_cursor = mock_connections.\

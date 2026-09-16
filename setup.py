@@ -13,7 +13,7 @@ setup(
     name='dj_anonymizer',
     packages=['dj_anonymizer'],
     include_package_data=True,
-    version='0.7.0',
+    version='0.7.1',
     description='dj_anonymizer is a utility designed to anonymize '
                 + 'production databases with various types of mock data, '
                 + 'specifically designed for use within Django projects.',
