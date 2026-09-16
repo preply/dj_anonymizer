@@ -192,10 +192,9 @@ def test_register_anonym_no_exclude():
 
 @pytest.mark.django_db
 def test_anonymizer_construction_is_idempotent(tmp_path):
-    # Regression test for the worker_flaky failure: constructing Anonymizer a
-    # second time in the same process re-imported the definition files and
-    # re-ran their module-level register_* calls, raising "already declared".
-    # A definition file must be loaded once, so repeated construction is safe.
+    # Constructing Anonymizer twice used to re-import the definition files and
+    # re-run their register_* calls, raising "already declared". Files are now
+    # loaded once, so repeated construction is safe.
     (tmp_path / 'base.py').write_text(
         'from django.contrib.auth.models import Group\n'
         'from dj_anonymizer import register_models\n'
